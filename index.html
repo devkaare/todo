@@ -21,10 +21,20 @@
 					</ul>
 				</nav>
 			</header>
+			<section>
+				<h2>New Todo</h2>
+				<p>Upload a new todo</p>
+				<form>
+					<div class="gird">
+						<input type="text" name="title" placeholder="Title" aria-label="Title" required>
+						<input type="description" name="description" placeholder="Description" aria-label="Description" required>
+					</div>
+					<button type="submit">Submit</button>
+				</form>
+			</section>
 				<article>
 					<header>
-						<h1>{ todo.Title }</h1>
-						<h4>{ strconv.Itoa(todo.ID) }</h4>
+						<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
 					</header>
 					<body>
 						<p>{ todo.Description }</p>

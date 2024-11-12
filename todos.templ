@@ -2,18 +2,19 @@ package main
 
 import "strconv"
 
-templ viewTodo(todo Todo) {
+templ layout(title string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title></title>
+			<title>{ title }</title>
 			<meta name="color-scheme" content="light dark">
 			<link
 			  rel="stylesheet"
 			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
 			>
+			<script src="<https://unpkg.com/htmx.org@2.0.3>" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
 		</head>
 		<body>
 			<main class="container">
@@ -26,14 +27,7 @@ templ viewTodo(todo Todo) {
 						</ul>
 					</nav>
 				</header>
-				<article>
-					<header>
-						<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
-					</header>
-					<body>
-						<p>{ todo.Description }</p>
-					</body>
-				</article>
+				{ children... }
 				<footer>
 					<p>© 2024 Kaare</p>
 				</footer>
@@ -42,41 +36,27 @@ templ viewTodo(todo Todo) {
 	</html>
 }
 
+templ viewTodo(todo Todo) {
+	@layout(todo.Title) {
+		<article>
+			<header>
+				<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
+			</header>
+			<body>
+				<p>{ todo.Description }</p>
+			</body>
+		</article>
+	}
+}
+
 templ viewTodos(todos []Todo) {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title></title>
-			<meta name="color-scheme" content="light dark">
-			<link
-			  rel="stylesheet"
-			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-			>
-		</head>
-		<body>
-			<main class="container">
-				<header>
-					<h1>Todo</h1>
-					<p>A simple project by Kaare</p>
-					<nav>
-						<ul>
-							<li><a href="/">View all todos</a></li>
-						</ul>
-					</nav>
-				</header>
-				<div>
-					<ul>
-						for _, todo := range todos {
-							<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
-						}
-					</ul>
-				</div>
-				<footer>
-					<p>© 2024 Kaare</p>
-				</footer>
-			</main>
-		</body>
-	</html>
+	@layout("Todos") {
+		<div>
+			<ul>
+				for _, todo := range todos {
+					<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
+				}
+			</ul>
+		</div>
+	}
 }
