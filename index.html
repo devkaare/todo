@@ -15,17 +15,21 @@
 			<header>
 				<h1>Todo</h1>
 				<p>A simple project by Kaare</p>
+				<nav>
+					<ul>
+						<li><a href="/">View all todos</a></li>
+					</ul>
+				</nav>
 			</header>
-			<nav>
-				<ul>
-					<li><a href="/">View all todos</a></li>
-				</ul>
-			</nav>
-			<div>
-				<h1>Foo</h1>
-				<h2>1</h2>
-				<p>Bar</p>
-			</div>
+				<article>
+					<header>
+						<h1>{ todo.Title }</h1>
+						<h4>{ strconv.Itoa(todo.ID) }</h4>
+					</header>
+					<body>
+						<p>{ todo.Description }</p>
+					</body>
+				</article>
 			<footer>
 				<p>© 2024 Kaare</p>
 			</footer>

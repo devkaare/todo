@@ -9,12 +9,35 @@ templ viewTodo(todo Todo) {
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title></title>
-			<link href="css/style.css" rel="stylesheet">
+			<meta name="color-scheme" content="light dark">
+			<link
+			  rel="stylesheet"
+			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+			>
 		</head>
 		<body>
-			<h1>{ todo.Title }</h1>
-			<h2>{ strconv.Itoa(todo.ID) }</h2>
-			<p>{ todo.Description }</p>
+			<main class="container">
+				<header>
+					<h1>Todo</h1>
+					<p>A simple project by Kaare</p>
+					<nav>
+						<ul>
+							<li><a href="/">View all todos</a></li>
+						</ul>
+					</nav>
+				</header>
+				<article>
+					<header>
+						<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
+					</header>
+					<body>
+						<p>{ todo.Description }</p>
+					</body>
+				</article>
+				<footer>
+					<p>© 2024 Kaare</p>
+				</footer>
+			</main>
 		</body>
 	</html>
 }
@@ -26,14 +49,34 @@ templ viewTodos(todos []Todo) {
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title></title>
-			<link href="css/style.css" rel="stylesheet">
+			<meta name="color-scheme" content="light dark">
+			<link
+			  rel="stylesheet"
+			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+			>
 		</head>
 		<body>
-		for _, todo := range todos {
-			<h1>{ todo.Title }</h1>
-			<h2>{ strconv.Itoa(todo.ID) }</h2>
-			<p>{ todo.Description }</p>
-		}
+			<main class="container">
+				<header>
+					<h1>Todo</h1>
+					<p>A simple project by Kaare</p>
+					<nav>
+						<ul>
+							<li><a href="/">View all todos</a></li>
+						</ul>
+					</nav>
+				</header>
+				<div>
+					<ul>
+						for _, todo := range todos {
+							<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
+						}
+					</ul>
+				</div>
+				<footer>
+					<p>© 2024 Kaare</p>
+				</footer>
+			</main>
 		</body>
 	</html>
 }
