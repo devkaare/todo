@@ -1,0 +1,39 @@
+package main 
+
+import "strconv"
+
+templ viewTodo(todo Todo) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title></title>
+			<link href="css/style.css" rel="stylesheet">
+		</head>
+		<body>
+			<h1>{ todo.Title }</h1>
+			<h2>{ strconv.Itoa(todo.ID) }</h2>
+			<p>{ todo.Description }</p>
+		</body>
+	</html>
+}
+
+templ viewTodos(todos []Todo) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title></title>
+			<link href="css/style.css" rel="stylesheet">
+		</head>
+		<body>
+		for _, todo := range todos {
+			<h1>{ todo.Title }</h1>
+			<h2>{ strconv.Itoa(todo.ID) }</h2>
+			<p>{ todo.Description }</p>
+		}
+		</body>
+	</html>
+}
