@@ -14,7 +14,7 @@ templ layout(title string) {
 			  rel="stylesheet"
 			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
 			>
-			<script src="<https://unpkg.com/htmx.org@2.0.3>" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+			  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
 		</head>
 		<body>
 			<main class="container">
@@ -36,6 +36,20 @@ templ layout(title string) {
 	</html>
 }
 
+templ form() {
+	<section>
+		<h2>New todo</h2>
+		<p>Foobar</p>
+		<form hx-post="/api/v2" hx-target="#todos" hx-swap="beforeend ">
+			<div class="gird">
+				<input type="text" name="title" placeholder="Title" aria-label="Title" required>
+				<input type="description" name="description" placeholder="Description" aria-label="Description" required>
+			</div>
+			<button type="submit">Submit</button>
+		</form>
+	</section>
+}
+
 templ viewTodo(todo Todo) {
 	@layout(todo.Title) {
 		<article>
@@ -46,17 +60,19 @@ templ viewTodo(todo Todo) {
 				<p>{ todo.Description }</p>
 			</body>
 		</article>
+		@form()
 	}
 }
 
 templ viewTodos(todos []Todo) {
 	@layout("Todos") {
 		<div>
-			<ul>
+			<ul id="todos">
 				for _, todo := range todos {
 					<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
 				}
 			</ul>
 		</div>
+		@form()
 	}
 }

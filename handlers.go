@@ -94,3 +94,14 @@ func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("Successfully received post request"))
 }
+
+func uploadTodoHandler2(w http.ResponseWriter, r *http.Request) {
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+	fmt.Println(title, description)
+
+	// <li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
+	li := fmt.Sprintf("<li><a href=\"#\">%s</a></li>", title)
+
+	fmt.Fprintln(w, li)
+}
