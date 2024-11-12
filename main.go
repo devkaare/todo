@@ -20,7 +20,8 @@ func main() {
 	r.Get("/api/v1", getTodosHandler)
 	r.Post("/api/v1", uploadTodoHandler)
 
-	r.Post("/api/v2", uploadTodoHandler2)
+	r.Post("/api/v2/upload", uploadHandler)
+	r.Post("/api/v2/update", updateHandler)
 
 	http.ListenAndServe(":3000", r)
 }

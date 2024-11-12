@@ -95,13 +95,40 @@ func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Successfully received post request"))
 }
 
-func uploadTodoHandler2(w http.ResponseWriter, r *http.Request) {
+func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	description := r.FormValue("description")
+
+	// TODO: Add todo to todos here
 	fmt.Println(title, description)
 
 	// <li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
-	li := fmt.Sprintf("<li><a href=\"#\">%s</a></li>", title)
+	entry := fmt.Sprintf("<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", 69420, title)
 
-	fmt.Fprintln(w, li)
+	fmt.Fprintln(w, entry)
+}
+
+func updateHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+
+	fmt.Println(title, description)
+	fmt.Println(r.Method)
+
+	// <header>
+	// 	<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
+	// </header>
+	// <body>
+	// 	<p>{ todo.Description }</p>
+	// </body>
+	todo := fmt.Sprintf(`
+		<header>
+			<h1>%s#%d</h1>
+		</header>
+		<body>
+			<p>%s<p>
+		</body>
+		`, title, 69420, description)
+
+	fmt.Fprintln(w, todo)
 }

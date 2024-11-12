@@ -30,29 +30,19 @@ templ layout(title string) {
 				{ children... }
 				<footer>
 					<p>© 2024 Kaare</p>
+					<small>
+						Built with <a href="https://picocss.com">Pico</a> •
+						<a href="https://github.com/picocss/examples/blob/master/v2-html/index.html">Source code</a>
+					</small>
 				</footer>
 			</main>
 		</body>
 	</html>
 }
 
-templ form() {
-	<section>
-		<h2>New todo</h2>
-		<p>Foobar</p>
-		<form hx-post="/api/v2" hx-target="#todos" hx-swap="beforeend ">
-			<div class="gird">
-				<input type="text" name="title" placeholder="Title" aria-label="Title" required>
-				<input type="description" name="description" placeholder="Description" aria-label="Description" required>
-			</div>
-			<button type="submit">Submit</button>
-		</form>
-	</section>
-}
-
 templ viewTodo(todo Todo) {
 	@layout(todo.Title) {
-		<article>
+		<article id="todo-details">
 			<header>
 				<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
 			</header>
@@ -60,19 +50,39 @@ templ viewTodo(todo Todo) {
 				<p>{ todo.Description }</p>
 			</body>
 		</article>
-		@form()
+		<section>
+			<h2>Update Todo</h2>
+			<p>Update this Todo</p>
+			<form hx-post="/api/v2/update" hx-target="#todo-details">
+				<div class="gird">
+					<input type="text" name="title" placeholder="Title" required>
+					<input type="description" name="description" placeholder="Description"required>
+				</div>
+				<button type="submit">Submit</button>
+			</form>
+		</section>
 	}
 }
 
 templ viewTodos(todos []Todo) {
-	@layout("Todos") {
+	@layout("Todo List") {
 		<div>
-			<ul id="todos">
+			<ul id="todo-list">
 				for _, todo := range todos {
 					<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
 				}
 			</ul>
 		</div>
-		@form()
+		<section>
+			<h2>New Todo</h2>
+			<p>Create a New Todo</p>
+			<form hx-post="/api/v2/upload" hx-target="#todo-list" hx-swap="beforeend">
+				<div class="gird">
+					<input type="text" name="title" placeholder="Title" required>
+					<input type="description" name="description" placeholder="Description"required>
+				</div>
+				<button type="submit">Submit</button>
+			</form>
+		</section>
 	}
 }
