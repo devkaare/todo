@@ -10,11 +10,13 @@ templ layout(title string) {
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title>{ title }</title>
 			<meta name="color-scheme" content="light dark">
+
+			<!-- Styling etc (pico css and htmx) -->
 			<link
 			  rel="stylesheet"
 			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
 			>
-			  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.3"></script>
 		</head>
 		<body>
 			<main class="container">
@@ -51,10 +53,10 @@ templ viewTodo(todo Todo) {
 			</body>
 		</article>
 			<!-- Small form for delete button -->
-			<form hx-post="/api/v2/delete">
+			<form hx-post="/api/v2/delete" hx-target="#todo-details">
 				<!-- Add hidden input for ID -->
 				<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
-				<button type="submit">Delete</button>
+				<button type="submit" class="secondary">Delete</button>
 			</form>
 		<section>
 			<h2>Update Todo</h2>

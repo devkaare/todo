@@ -19,7 +19,7 @@ type Todo struct {
 }
 
 var todos []Todo = []Todo{
-	{ID: 1, Title: "Example title", Description: "Example description"},
+	{ID: 9223372036854775807, Title: "Example title", Description: "Example description"},
 }
 
 func getTodoByID(ID int) (Todo, bool) {
@@ -52,7 +52,7 @@ func todoHandler(w http.ResponseWriter, r *http.Request) {
 	todo, ok := getTodoByID(ID)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d does not exist", ID)
+		fmt.Fprintf(w, "Todo with ID: %d does not exist\n", ID)
 		return
 	}
 
@@ -180,7 +180,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	result := fmt.Sprintln("Successfully deleted todo!")
+	result := fmt.Sprintln("<p>Successfully deleted todo!</p>")
 
 	fmt.Fprintln(w, result)
 }
