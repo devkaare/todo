@@ -19,8 +19,7 @@ type Todo struct {
 }
 
 var todos []Todo = []Todo{
-	{ID: 1, Title: "Foo", Description: "Bar"},
-	{ID: 2, Title: "Foo", Description: "Bar"},
+	{ID: 1, Title: "Example title", Description: "Example description"},
 }
 
 func getTodoByID(ID int) (Todo, bool) {
@@ -30,6 +29,10 @@ func getTodoByID(ID int) (Todo, bool) {
 		}
 	}
 	return Todo{}, false
+}
+
+func deleteTodoByID(s []Todo, i int) []Todo {
+	return append(s[:i], s[i+1:]...)
 }
 
 func todosHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +45,7 @@ func todoHandler(w http.ResponseWriter, r *http.Request) {
 	ID, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read param")
+		fmt.Fprintln(w, "Failed to read ID parameter")
 		return
 	}
 
@@ -92,43 +95,92 @@ func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
 	// Add todo to todos
 	todos = append(todos, todo)
 
-	w.Write([]byte("Successfully received post request"))
+	w.Write([]byte("Successfully uploaded todo!"))
 }
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.FormValue("title")
-	description := r.FormValue("description")
+	var todo Todo
 
-	// TODO: Add todo to todos here
-	fmt.Println(title, description)
+	todo.Title = r.FormValue("title")
+	todo.Description = r.FormValue("description")
 
-	// <li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
-	entry := fmt.Sprintf("<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", 69420, title)
+	// Generate random ID
+	todo.ID = rand.IntN(math.MaxInt)
 
-	fmt.Fprintln(w, entry)
+	// Check if ID exists
+	if _, ok := getTodoByID(todo.ID); ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d already exists\n", todo.ID)
+		return
+	}
+
+	// Add todo to todos
+	todos = append(todos, todo)
+
+	result := fmt.Sprintf("<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title)
+
+	fmt.Fprintln(w, result)
 }
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.FormValue("title")
-	description := r.FormValue("description")
+	param := r.FormValue("ID")
+	ID, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
 
-	fmt.Println(title, description)
-	fmt.Println(r.Method)
+	// Check if ID exists
+	if _, ok := getTodoByID(ID); !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		return
+	}
 
-	// <header>
-	// 	<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
-	// </header>
-	// <body>
-	// 	<p>{ todo.Description }</p>
-	// </body>
-	todo := fmt.Sprintf(`
-		<header>
-			<h1>%s#%d</h1>
-		</header>
-		<body>
-			<p>%s<p>
-		</body>
-		`, title, 69420, description)
+	var todo Todo
 
-	fmt.Fprintln(w, todo)
+	todo.ID = ID
+	todo.Title = r.FormValue("title")
+	todo.Description = r.FormValue("description")
+
+	// Save updated todo
+	for i, v := range todos {
+		if todo.ID == v.ID {
+			todos[i] = todo
+		}
+	}
+
+	result := fmt.Sprintf("<header><h1>%s#%d</h1></header><body><p>%s</p></body>", todo.Title, todo.ID, todo.Description)
+
+	fmt.Fprintln(w, result)
+}
+
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	param := r.FormValue("ID")
+	ID, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
+
+	// Check if ID exists
+	if _, ok := getTodoByID(ID); !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		return
+	}
+
+	// Save updated todo
+	for i, v := range todos {
+		if ID == v.ID {
+			// Delete slice at i (index) from todos
+			todos = deleteTodoByID(todos, i)
+		}
+	}
+
+	result := fmt.Sprintln("Successfully deleted todo!")
+
+	fmt.Fprintln(w, result)
 }

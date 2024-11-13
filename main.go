@@ -22,6 +22,7 @@ func main() {
 
 	r.Post("/api/v2/upload", uploadHandler)
 	r.Post("/api/v2/update", updateHandler)
+	r.Post("/api/v2/delete", deleteHandler)
 
 	http.ListenAndServe(":3000", r)
 }
