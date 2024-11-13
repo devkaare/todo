@@ -151,9 +151,8 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	result := fmt.Sprintf("<header><h1>%s#%d</h1></header><body><p>%s</p></body>", todo.Title, todo.ID, todo.Description)
-
-	fmt.Fprintln(w, result)
+	page := details(todo)
+	page.Render(context.Background(), w)
 }
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
@@ -183,4 +182,25 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	result := fmt.Sprintln("<p>Successfully deleted todo!</p>")
 
 	fmt.Fprintln(w, result)
+}
+
+func editHandler(w http.ResponseWriter, r *http.Request) {
+	param := r.FormValue("ID")
+	ID, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
+
+	// Get todo
+	todo, ok := getTodoByID(ID)
+	if !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		return
+	}
+
+	page := edit(todo)
+	page.Render(context.Background(), w)
 }

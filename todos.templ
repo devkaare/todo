@@ -42,34 +42,43 @@ templ layout(title string) {
 	</html>
 }
 
+templ details(todo Todo) {
+	<article id="todo-details">
+		<header>
+			<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
+		</header>
+		<body>
+			<p>{ todo.Description }</p>
+		</body>
+	</article>
+}
+
+templ edit(todo Todo) {
+	<form hx-post="/api/v2/update" hx-swap="outerHTML">
+		<div class="gird">
+			<input type="text" name="title" placeholder="Title" required>
+			<input type="text" name="description" placeholder="Description"required>
+			<!-- Add hidden input for ID -->
+			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+		</div>
+		<button type="submit">Submit</button>
+	</form>
+}
+
 templ viewTodo(todo Todo) {
 	@layout(todo.Title) {
-		<article id="todo-details">
-			<header>
-				<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
-			</header>
-			<body>
-				<p>{ todo.Description }</p>
-			</body>
-		</article>
-			<!-- Small form for delete button -->
-			<form hx-post="/api/v2/delete" hx-target="#todo-details">
+		@details(todo)
+		<section class="grid">
+			<!-- Edit button form -->
+			<form hx-post="/api/v2/edit" hx-target="#todo-details" hx-swap="outerHTML">
+				<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+				<button type="submit">Edit</button>
+			</form>
+			<!-- Delete button form -->
+			<form hx-post="/api/v2/delete" hx-target="#todo-details" hx-swap="outerHTML">
 				<!-- Add hidden input for ID -->
 				<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
 				<button type="submit" class="secondary">Delete</button>
-			</form>
-		<section>
-			// TODO: Add `Edit` button to render this
-			<h2>Update Todo</h2>
-			<p>Update this Todo</p>
-			<form hx-post="/api/v2/update" hx-target="#todo-details">
-				<div class="gird">
-					<input type="text" name="title" placeholder="Title" required>
-					<input type="text" name="description" placeholder="Description"required>
-					<!-- Add hidden input for ID -->
-					<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
-				</div>
-				<button type="submit">Submit</button>
 			</form>
 		</section>
 	}
