@@ -65,22 +65,26 @@ templ edit(todo Todo) {
 	</form>
 }
 
+templ editButtons(todo Todo) {
+	<section class="grid">
+		<!-- Edit button form -->
+		<form hx-post="/api/v2/edit" hx-target="#todo-details" hx-swap="outerHTML">
+			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+			<button type="submit">Edit</button>
+		</form>
+		<!-- Delete button form -->
+		<form hx-post="/api/v2/delete" hx-target="#todo-details" hx-swap="outerHTML">
+			<!-- Add hidden input for ID -->
+			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+			<button type="submit" class="secondary">Delete</button>
+		</form>
+	</section>
+}
+
 templ viewTodo(todo Todo) {
 	@layout(todo.Title) {
 		@details(todo)
-		<section class="grid">
-			<!-- Edit button form -->
-			<form hx-post="/api/v2/edit" hx-target="#todo-details" hx-swap="outerHTML">
-				<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
-				<button type="submit">Edit</button>
-			</form>
-			<!-- Delete button form -->
-			<form hx-post="/api/v2/delete" hx-target="#todo-details" hx-swap="outerHTML">
-				<!-- Add hidden input for ID -->
-				<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
-				<button type="submit" class="secondary">Delete</button>
-			</form>
-		</section>
+		@editButtons(todo)
 	}
 }
 
