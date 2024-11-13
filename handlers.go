@@ -18,14 +18,14 @@ type Todo struct {
 	Description string
 }
 
-var todos []Todo = []Todo{
+var todoList []Todo = []Todo{
 	{ID: 9223372036854775807, Title: "Example title", Description: "Example description"},
 }
 
 func getTodoByID(ID int) (Todo, bool) {
-	for i, v := range todos {
+	for i, v := range todoList {
 		if ID == v.ID {
-			return todos[i], true
+			return todoList[i], true
 		}
 	}
 	return Todo{}, false
@@ -35,8 +35,8 @@ func deleteTodoByID(s []Todo, i int) []Todo {
 	return append(s[:i], s[i+1:]...)
 }
 
-func todosHandler(w http.ResponseWriter, r *http.Request) {
-	page := viewTodos(todos)
+func todoListHandler(w http.ResponseWriter, r *http.Request) {
+	page := todoListComponent(todoList)
 	page.Render(context.Background(), w)
 }
 
@@ -56,19 +56,19 @@ func todoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := viewTodo(todo)
+	page := todoComponent(todo)
 	page.Render(context.Background(), w)
 }
 
-func getTodosHandler(w http.ResponseWriter, r *http.Request) {
-	todosResult, err := json.Marshal(todos)
+func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
+	todoListResult, err := json.Marshal(todoList)
 	if err != nil {
 		w.WriteHeader(500)
-		// fmt.Fprintln(w, "Failed to marshal todos")
+		// fmt.Fprintln(w, "Failed to marshal todoList")
 		// return
-		panic("Failed to marshal Todos")
+		panic("Failed to marshal todoList")
 	}
-	w.Write(todosResult)
+	w.Write(todoListResult)
 }
 
 func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
@@ -92,8 +92,8 @@ func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Add todo to todos
-	todos = append(todos, todo)
+	// Add todo to todoList
+	todoList = append(todoList, todo)
 
 	w.Write([]byte("Successfully uploaded todo!"))
 }
@@ -114,8 +114,8 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Add todo to todos
-	todos = append(todos, todo)
+	// Add todo to todoList
+	todoList = append(todoList, todo)
 
 	result := fmt.Sprintf("<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title)
 
@@ -145,13 +145,13 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	todo.Description = r.FormValue("description")
 
 	// Save updated todo
-	for i, v := range todos {
+	for i, v := range todoList {
 		if todo.ID == v.ID {
-			todos[i] = todo
+			todoList[i] = todo
 		}
 	}
 
-	page := details(todo)
+	page := detailComponent(todo)
 	page.Render(context.Background(), w)
 }
 
@@ -172,10 +172,10 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Save updated todo
-	for i, v := range todos {
+	for i, v := range todoList {
 		if ID == v.ID {
-			// Delete slice at i (index) from todos
-			todos = deleteTodoByID(todos, i)
+			// Delete slice at i (index) from todoList
+			todoList = deleteTodoByID(todoList, i)
 		}
 	}
 
@@ -201,6 +201,6 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := edit(todo)
+	page := editComponent(todo)
 	page.Render(context.Background(), w)
 }

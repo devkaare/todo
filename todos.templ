@@ -2,13 +2,13 @@ package main
 
 import "strconv"
 
-templ layout(title string) {
+templ layoutComponent() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title>{ title }</title>
+			<title>Todo | by Kaare</title>
 			<meta name="color-scheme" content="light dark">
 
 			<!-- Styling etc (pico css and htmx) -->
@@ -32,17 +32,13 @@ templ layout(title string) {
 				{ children... }
 				<footer>
 					<p>© 2024 Kaare</p>
-					<small>
-						Built with <a href="https://picocss.com">Pico</a> •
-						<a href="https://github.com/picocss/examples/blob/master/v2-html/index.html">Source code</a>
-					</small>
 				</footer>
 			</main>
 		</body>
 	</html>
 }
 
-templ details(todo Todo) {
+templ detailComponent(todo Todo) {
 	<article id="todo-details">
 		<header>
 			<h1>{ todo.Title }#{ strconv.Itoa(todo.ID) }</h1>
@@ -53,7 +49,8 @@ templ details(todo Todo) {
 	</article>
 }
 
-templ edit(todo Todo) {
+templ editComponent(todo Todo) {
+	<!-- Update -->
 	<form hx-post="/api/v2/update" hx-swap="outerHTML">
 		<div class="gird">
 			<input type="text" name="title" placeholder="Title" required>
@@ -65,47 +62,50 @@ templ edit(todo Todo) {
 	</form>
 }
 
-templ editButtons(todo Todo) {
+templ actionComponent(todo Todo) {
+	<hr>
 	<section class="grid">
-		<!-- Edit button form -->
+		<!-- Edit -->
 		<form hx-post="/api/v2/edit" hx-target="#todo-details" hx-swap="outerHTML">
 			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
 			<button type="submit">Edit</button>
 		</form>
-		<!-- Delete button form -->
+		<!-- Delete -->
 		<form hx-post="/api/v2/delete" hx-target="#todo-details" hx-swap="outerHTML">
-			<!-- Add hidden input for ID -->
 			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
 			<button type="submit" class="secondary">Delete</button>
 		</form>
 	</section>
 }
 
-templ viewTodo(todo Todo) {
-	@layout(todo.Title) {
-		@details(todo)
-		@editButtons(todo)
+
+templ todoComponent(todo Todo) {
+	@layoutComponent() {
+		@detailComponent(todo)
+		@actionComponent(todo)
 	}
 }
 
-templ viewTodos(todos []Todo) {
-	@layout("Todo List") {
-		<div>
+templ todoListComponent(todoList []Todo) {
+	@layoutComponent() {
+		<section>
 			<ul id="todo-list">
-				for _, todo := range todos {
+				for _, todo := range todoList {
 					<!-- Templ requires href attributes to be inside templ.URL ID -->
-					<li><a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a></li>
+					<li>
+						<a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a>
+					</li>
 				}
 			</ul>
-		</div>
+		</section>
+		<hr>
 		<section>
 			<h2>New Todo</h2>
-			<p>Create a New Todo</p>
+			<p>Add a new todo</p>
+			<!-- Upload -->
 			<form hx-post="/api/v2/upload" hx-target="#todo-list" hx-swap="beforeend">
-				<div class="gird">
-					<input type="text" name="title" placeholder="Title" required>
-					<input type="description" name="description" placeholder="Description"required>
-				</div>
+				<input type="text" name="title" placeholder="Title" required>
+				<input type="description" name="description" placeholder="Description"required>
 				<button type="submit">Submit</button>
 			</form>
 		</section>

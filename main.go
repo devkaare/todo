@@ -11,13 +11,10 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	// NOTE: This does render updates to todos, so im using r.Get kinda like middleware instead (see handlers)
-	// r.Handle("/all", templ.Handler(viewTodos(todos)))
-
-	r.Get("/", todosHandler)
+	r.Get("/", todoListHandler)
 	r.Get("/{ID}", todoHandler)
 
-	r.Get("/api/v1", getTodosHandler)
+	r.Get("/api/v1", getTodoListHandler)
 	r.Post("/api/v1", uploadTodoHandler)
 
 	r.Post("/api/v2/upload", uploadHandler)
