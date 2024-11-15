@@ -19,4 +19,4 @@ Start the webserver running the `go run main.go` command in the same directory a
 
 > ^ This is outdated, the `Update Todo` section is now only shown after pressing an `Edit` button (the new edit form replaces the todo section btw)
 
-> ![todo-updated](https://github.com/devkaare/todo/blob/main/docs/todo-updated.png)
+![todo-updated](https://github.com/devkaare/todo/blob/main/docs/todo-updated.png)
