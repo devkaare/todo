@@ -22,9 +22,9 @@ var todoList []Todo = []Todo{
 	{ID: 9223372036854775807, Title: "Example title", Description: "Example description"},
 }
 
-func getTodoByID(ID int) (Todo, bool) {
+func getTodoByID(id int) (Todo, bool) {
 	for i, v := range todoList {
-		if ID == v.ID {
+		if id == v.ID {
 			return todoList[i], true
 		}
 	}
@@ -42,17 +42,17 @@ func todoListHandler(w http.ResponseWriter, r *http.Request) {
 
 func todoHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
-	ID, err := strconv.Atoi(param)
+	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
 		fmt.Fprintln(w, "Failed to read ID parameter")
 		return
 	}
 
-	todo, ok := getTodoByID(ID)
+	todo, ok := getTodoByID(id)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d does not exist\n", ID)
+		fmt.Fprintf(w, "Todo with ID: %d does not exist\n", id)
 		return
 	}
 
@@ -124,7 +124,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 func updateHandler(w http.ResponseWriter, r *http.Request) {
 	param := r.FormValue("ID")
-	ID, err := strconv.Atoi(param)
+	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
 		fmt.Fprintln(w, "Failed to read ID parameter")
@@ -132,15 +132,15 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if ID exists
-	if _, ok := getTodoByID(ID); !ok {
+	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
 		return
 	}
 
 	var todo Todo
 
-	todo.ID = ID
+	todo.ID = id
 	todo.Title = r.FormValue("title")
 	todo.Description = r.FormValue("description")
 
@@ -157,7 +157,7 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	param := r.FormValue("ID")
-	ID, err := strconv.Atoi(param)
+	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
 		fmt.Fprintln(w, "Failed to read ID parameter")
@@ -165,15 +165,15 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if ID exists
-	if _, ok := getTodoByID(ID); !ok {
+	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
 		return
 	}
 
 	// Save updated todo
 	for i, v := range todoList {
-		if ID == v.ID {
+		if id == v.ID {
 			// Delete slice at i (index) from todoList
 			todoList = deleteTodoByID(todoList, i)
 		}
@@ -186,7 +186,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	param := r.FormValue("ID")
-	ID, err := strconv.Atoi(param)
+	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
 		fmt.Fprintln(w, "Failed to read ID parameter")
@@ -194,10 +194,10 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get todo
-	todo, ok := getTodoByID(ID)
+	todo, ok := getTodoByID(id)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", ID)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
 		return
 	}
 

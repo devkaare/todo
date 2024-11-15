@@ -49,6 +49,7 @@ templ detailComponent(todo Todo) {
 	</article>
 }
 
+// TODO: Add functionality to remove actionComponent(s) when editing
 templ editComponent(todo Todo) {
 	<!-- Update -->
 	<form hx-post="/api/v2/update" hx-swap="outerHTML">
