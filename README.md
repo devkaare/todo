@@ -1,6 +1,6 @@
 # Todo Web App
 
-> Feel free to use this yourself, although it's still in development, so I wouldn't recommend it
+> Feel free to use this yourself, although it's WIP, so I wouldn't recommend it
 
 ## Introduction
 
