@@ -13,14 +13,14 @@ func main() {
 
 	r.Get("/api/v1", getTodoListHandler)
 	r.Get("/api/v1/{ID}", getTodoHandler)
-	r.Post("/api/v1/upload", createTodoHandler)
-	r.Patch("/api/v1/update", updateTodoHandler)
-	r.Delete("/api/v1/delete", deleteTodoHandler)
+	r.Post("/api/v1/create", createTodoHandler)
+	r.Patch("/api/v1/update/{ID}", updateTodoHandler)
+	r.Delete("/api/v1/delete/{ID}", deleteTodoHandler)
 
 	r.Get("/", todoListHandler)
 	r.Get("/{ID}", todoHandler)
+	r.Post("/api/v2/create", createHandler)
 	r.Get("/api/v2/update/form/{ID}", todoUpdateHandler)
-	r.Post("/api/v2/upload", createHandler)
 	r.Patch("/api/v2/update/{ID}", updateHandler)
 	r.Delete("/api/v2/delete/{ID}", deleteHandler)
 

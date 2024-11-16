@@ -112,9 +112,12 @@ func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var todo Todo
-	todo.ID = id
-	todo.Title = r.FormValue("title")
-	todo.Description = r.FormValue("description")
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&todo); err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to decode Todo")
+		return
+	}
 
 	// Save updated todo
 	for i, v := range todoList {
