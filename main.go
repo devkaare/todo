@@ -11,19 +11,18 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	r.Get("/", todoListHandler)
-	r.Get("/{ID}", todoHandler)
-
-	r.Post("/api/v2/upload", uploadHandler)
-	r.Get("/api/v2/update/form/{ID}", todoUpdateHandler)
-	r.Patch("/api/v2/update/{ID}", updateHandler)
-	r.Delete("/api/v2/delete/{ID}", deleteHandler)
-
 	r.Get("/api/v1/", getTodoListHandler)
 	r.Get("/api/v1/{ID}", getTodoHandler)
-	r.Post("/api/v1/upload", uploadTodoHandler)
+	r.Post("/api/v1/upload", createTodoHandler)
 	r.Patch("/api/v1/update", updateTodoHandler)
-	r.Delete("/api/v1/delete", nil)
+	r.Delete("/api/v1/delete", deleteTodoHandler)
+
+	r.Get("/", todoListHandler)
+	r.Get("/{ID}", todoHandler)
+	r.Get("/api/v2/update/form/{ID}", todoUpdateHandler)
+	r.Post("/api/v2/upload", createHandler)
+	r.Patch("/api/v2/update/{ID}", updateHandler)
+	r.Delete("/api/v2/delete/{ID}", deleteHandler)
 
 	http.ListenAndServe(":3000", r)
 }

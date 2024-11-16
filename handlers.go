@@ -61,7 +61,7 @@ func todoHandler(w http.ResponseWriter, r *http.Request) {
 	page.Render(context.Background(), w)
 }
 
-func uploadHandler(w http.ResponseWriter, r *http.Request) {
+func createHandler(w http.ResponseWriter, r *http.Request) {
 	var todo Todo
 
 	todo.Title = r.FormValue("title")
@@ -200,7 +200,7 @@ func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
+func createTodoHandler(w http.ResponseWriter, r *http.Request) {
 	var todo Todo
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&todo); err != nil {
@@ -248,6 +248,31 @@ func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	for i, v := range todoList {
 		if todo.ID == v.ID {
 			todoList[i] = todo
+		}
+	}
+}
+
+func deleteTodoHandler(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
+
+	// Check if ID exists
+	if _, ok := getTodoByID(id); !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		return
+	}
+
+	// Save updated todo
+	for i, v := range todoList {
+		if id == v.ID {
+			// Delete todo at index from todoList
+			todoList = append(todoList[:i], todoList[i+1:]...)
 		}
 	}
 }
