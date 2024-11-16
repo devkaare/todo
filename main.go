@@ -11,7 +11,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	r.Get("/api/v1/", getTodoListHandler)
+	r.Get("/api/v1", getTodoListHandler)
 	r.Get("/api/v1/{ID}", getTodoHandler)
 	r.Post("/api/v1/upload", createTodoHandler)
 	r.Patch("/api/v1/update", updateTodoHandler)
