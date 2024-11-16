@@ -222,3 +222,32 @@ func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
 	// Add todo to todoList
 	todoList = append(todoList, todo)
 }
+
+func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
+
+	// Check if ID exists
+	if _, ok := getTodoByID(id); !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		return
+	}
+
+	var todo Todo
+	todo.ID = id
+	todo.Title = r.FormValue("title")
+	todo.Description = r.FormValue("description")
+
+	// Save updated todo
+	for i, v := range todoList {
+		if todo.ID == v.ID {
+			todoList[i] = todo
+		}
+	}
+}

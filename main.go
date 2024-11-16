@@ -22,7 +22,7 @@ func main() {
 	r.Get("/api/v1/", getTodoListHandler)
 	r.Get("/api/v1/{ID}", getTodoHandler)
 	r.Post("/api/v1/upload", uploadTodoHandler)
-	r.Patch("/api/v1/update", nil)
+	r.Patch("/api/v1/update", updateTodoHandler)
 	r.Delete("/api/v1/delete", nil)
 
 	http.ListenAndServe(":3000", r)
