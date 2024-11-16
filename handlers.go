@@ -164,6 +164,31 @@ func todoUpdateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // API Routes (V1)
+func getTodoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	param := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to read ID parameter")
+		return
+	}
+
+	todo, ok := getTodoByID(id)
+	if !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		return
+	}
+
+	encoder := json.NewEncoder(w)
+	if err = encoder.Encode(todo); err != nil {
+		w.WriteHeader(500)
+		panic("Failed to encode todo")
+	}
+}
+
 func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -171,7 +196,7 @@ func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
 	err := encoder.Encode(todoList)
 	if err != nil {
 		w.WriteHeader(500)
-		panic("Failed to marshal todoList")
+		panic("Failed to encode todoList")
 	}
 }
 

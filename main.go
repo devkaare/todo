@@ -19,9 +19,8 @@ func main() {
 	r.Patch("/api/v2/update/{ID}", updateHandler)
 	r.Delete("/api/v2/delete/{ID}", deleteHandler)
 
-	// TODO: Add undefined handlers
-	r.Get("/api/v1/", nil)
-	r.Get("/api/v1/{ID}", getTodoListHandler)
+	r.Get("/api/v1/", getTodoListHandler)
+	r.Get("/api/v1/{ID}", getTodoHandler)
 	r.Post("/api/v1/upload", uploadTodoHandler)
 	r.Patch("/api/v1/update", nil)
 	r.Delete("/api/v1/delete", nil)
