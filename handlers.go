@@ -35,41 +35,6 @@ func getTodoByID(id int) (Todo, bool) {
 	return Todo{}, false
 }
 
-// API Routes (V1)
-func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	encoder := json.NewEncoder(w)
-	err := encoder.Encode(todoList)
-	if err != nil {
-		w.WriteHeader(500)
-		panic("Failed to marshal todoList")
-	}
-}
-
-func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
-	var todo Todo
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&todo); err != nil {
-		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to decode Todo")
-		return
-	}
-
-	// Generate unique ID
-	todo.ID = rand.IntN(math.MaxInt)
-
-	// Check if ID exists
-	if _, ok := getTodoByID(todo.ID); ok {
-		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d already exists\n", todo.ID)
-		return
-	}
-
-	// Add todo to todoList
-	todoList = append(todoList, todo)
-}
-
 // API Routes (V2)
 func todoListHandler(w http.ResponseWriter, r *http.Request) {
 	page := todoListComponent(todoList)
@@ -177,7 +142,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "<p>Successfully deleted todo!</p>")
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request) {
+func todoUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -196,4 +161,39 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 	page := editComponent(todo)
 	page.Render(context.Background(), w)
+}
+
+// API Routes (V1)
+func getTodoListHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	encoder := json.NewEncoder(w)
+	err := encoder.Encode(todoList)
+	if err != nil {
+		w.WriteHeader(500)
+		panic("Failed to marshal todoList")
+	}
+}
+
+func uploadTodoHandler(w http.ResponseWriter, r *http.Request) {
+	var todo Todo
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&todo); err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "Failed to decode Todo")
+		return
+	}
+
+	// Generate unique ID
+	todo.ID = rand.IntN(math.MaxInt)
+
+	// Check if ID exists
+	if _, ok := getTodoByID(todo.ID); ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "Todo with ID: %d already exists\n", todo.ID)
+		return
+	}
+
+	// Add todo to todoList
+	todoList = append(todoList, todo)
 }
