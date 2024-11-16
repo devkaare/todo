@@ -10,8 +10,6 @@ templ layoutComponent() {
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title>Todo | by Kaare</title>
 			<meta name="color-scheme" content="light dark">
-
-			<!-- Styling etc (pico css and htmx) -->
 			<link
 			  rel="stylesheet"
 			  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
@@ -100,7 +98,6 @@ templ todoListComponent(todoList []Todo) {
 		<section>
 			<h2>New Todo</h2>
 			<p>Add a new todo</p>
-			<!-- Upload -->
 			<form hx-post="/api/v2/upload" hx-target="#todo-list" hx-swap="beforeend" autocomplete="off">
 				<fieldset role="group">
 					<input type="text" name="title" placeholder="Title" required>
