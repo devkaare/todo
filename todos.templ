@@ -19,13 +19,16 @@ templ layoutComponent() {
 			<script src="https://unpkg.com/htmx.org@2.0.3"></script>
 		</head>
 		<body>
-			<main class="container">
+			<!-- https://github.com/picocss/pico/discussions/482#discussioncomment-10465121 -->
+			<main class="container" style="transform: scale(0.9); max-width: 1000;"> 
 				<header>
 					<h1>Todo</h1>
 					<p>A simple project by Kaare</p>
 					<nav>
 						<ul>
-							<li><a href="/">Todo List</a></li>
+							<li>
+								<a href="/">Todo List</a>
+							</li>
 						</ul>
 					</nav>
 				</header>
@@ -49,15 +52,11 @@ templ detailComponent(todo Todo) {
 	</article>
 }
 
-// TODO: Add functionality to remove actionComponent(s) when editing
 templ editComponent(todo Todo) {
-	<!-- Update -->
-	<form hx-post="/api/v2/update" hx-swap="outerHTML">
+	<form hx-post={"/api/v2/update/" + strconv.Itoa(todo.ID)} hx-swap="outerHTML" autocomplete="off">
 		<div class="gird">
 			<input type="text" name="title" placeholder="Title" required>
 			<input type="text" name="description" placeholder="Description"required>
-			<!-- Add hidden input for ID -->
-			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
 		</div>
 		<button type="submit">Submit</button>
 	</form>
@@ -66,14 +65,10 @@ templ editComponent(todo Todo) {
 templ actionComponent(todo Todo) {
 	<hr>
 	<section class="grid">
-		<!-- Edit -->
-		<form hx-post="/api/v2/edit" hx-target="#todo-details" hx-swap="outerHTML">
-			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+		<form hx-post={"/api/v2/edit/" + strconv.Itoa(todo.ID)} hx-target="#todo-details" hx-swap="outerHTML">
 			<button type="submit">Edit</button>
 		</form>
-		<!-- Delete -->
-		<form hx-post="/api/v2/delete" hx-target="#todo-details" hx-swap="outerHTML">
-			<input type="hidden" name="ID" value={ strconv.Itoa(todo.ID) }>
+		<form hx-post={"/api/v2/delete/" + strconv.Itoa(todo.ID)} hx-target="#todo-details" hx-swap="outerHTML">
 			<button type="submit" class="secondary">Delete</button>
 		</form>
 	</section>
@@ -92,9 +87,11 @@ templ todoListComponent(todoList []Todo) {
 		<section>
 			<ul id="todo-list">
 				for _, todo := range todoList {
-					<!-- Templ requires href attributes to be inside templ.URL ID -->
 					<li>
-						<a href={ templ.URL(strconv.Itoa(todo.ID)) }>{ todo.Title }#{ strconv.Itoa(todo.ID) }</a>
+						<!-- Templ requires href attributes to be inside templ.URL -->
+						<a href={ templ.URL(strconv.Itoa(todo.ID)) } class="">
+							{ todo.Title }#{ strconv.Itoa(todo.ID) }
+						</a>
 					</li>
 				}
 			</ul>
@@ -104,10 +101,12 @@ templ todoListComponent(todoList []Todo) {
 			<h2>New Todo</h2>
 			<p>Add a new todo</p>
 			<!-- Upload -->
-			<form hx-post="/api/v2/upload" hx-target="#todo-list" hx-swap="beforeend">
-				<input type="text" name="title" placeholder="Title" required>
-				<input type="description" name="description" placeholder="Description"required>
-				<button type="submit">Submit</button>
+			<form hx-post="/api/v2/upload" hx-target="#todo-list" hx-swap="beforeend" autocomplete="off">
+				<fieldset role="group">
+					<input type="text" name="title" placeholder="Title" required>
+					<input type="description" name="description" placeholder="Description"required>
+					<button type="submit">Submit</button>
+				</fieldset>
 			</form>
 		</section>
 	}

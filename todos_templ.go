@@ -31,7 +31,7 @@ func layoutComponent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Todo | by Kaare</title><meta name=\"color-scheme\" content=\"light dark\"><!-- Styling etc (pico css and htmx) --><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\"><script src=\"https://unpkg.com/htmx.org@2.0.3\"></script></head><body><main class=\"container\"><header><h1>Todo</h1><p>A simple project by Kaare</p><nav><ul><li><a href=\"/\">Todo List</a></li></ul></nav></header>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Todo | by Kaare</title><meta name=\"color-scheme\" content=\"light dark\"><!-- Styling etc (pico css and htmx) --><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\"><script src=\"https://unpkg.com/htmx.org@2.0.3\"></script></head><body><main class=\"container\" style=\"transform: scale(0.9); max-width: 1000;\"><header><h1>Todo</h1><p>A simple project by Kaare</p><nav><ul><li><a href=\"/\">Todo List</a></li></ul></nav></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -75,7 +75,7 @@ func detailComponent(todo Todo) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(todo.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 44, Col: 19}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 46, Col: 19}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -88,7 +88,7 @@ func detailComponent(todo Todo) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(todo.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 44, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 46, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -101,7 +101,7 @@ func detailComponent(todo Todo) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(todo.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 47, Col: 24}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 49, Col: 24}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -136,20 +136,20 @@ func editComponent(todo Todo) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!-- Update --><form hx-post=\"/api/v2/update\" hx-swap=\"outerHTML\"><div class=\"gird\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"text\" name=\"description\" placeholder=\"Description\" required><!-- Add hidden input for ID --><input type=\"hidden\" name=\"ID\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form hx-post=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(todo.ID))
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/api/v2/update/" + strconv.Itoa(todo.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 59, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 55, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><button type=\"submit\">Submit</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" autocomplete=\"off\"><div class=\"gird\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"text\" name=\"description\" placeholder=\"Description\" required></div><button type=\"submit\">Submit</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -178,33 +178,33 @@ func actionComponent(todo Todo) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<hr><section class=\"grid\"><!-- Edit --><form hx-post=\"/api/v2/edit\" hx-target=\"#todo-details\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"ID\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<hr><section class=\"grid\"><form hx-post=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(todo.ID))
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs("/api/v2/edit/" + strconv.Itoa(todo.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 70, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 67, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button type=\"submit\">Edit</button></form><!-- Delete --><form hx-post=\"/api/v2/delete\" hx-target=\"#todo-details\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"ID\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#todo-details\" hx-swap=\"outerHTML\"><button type=\"submit\">Edit</button></form><form hx-post=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
-		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(todo.ID))
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs("/api/v2/delete/" + strconv.Itoa(todo.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 75, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 70, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button type=\"submit\" class=\"secondary\">Delete</button></form></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#todo-details\" hx-swap=\"outerHTML\"><button type=\"submit\" class=\"secondary\">Delete</button></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -305,7 +305,7 @@ func todoListComponent(todoList []Todo) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, todo := range todoList {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!-- Templ requires href attributes to be inside templ.URL ID --> <li><a href=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><!-- Templ requires href attributes to be inside templ.URL --><a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -314,14 +314,14 @@ func todoListComponent(todoList []Todo) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(todo.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 96, Col: 63}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 92, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -334,7 +334,7 @@ func todoListComponent(todoList []Todo) templ.Component {
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(todo.ID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 96, Col: 89}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `todos.templ`, Line: 92, Col: 45}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -345,7 +345,7 @@ func todoListComponent(todoList []Todo) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></section><hr><section><h2>New Todo</h2><p>Add a new todo</p><!-- Upload --><form hx-post=\"/api/v2/upload\" hx-target=\"#todo-list\" hx-swap=\"beforeend\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"description\" name=\"description\" placeholder=\"Description\" required> <button type=\"submit\">Submit</button></form></section>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></section><hr><section><h2>New Todo</h2><p>Add a new todo</p><!-- Upload --><form hx-post=\"/api/v2/upload\" hx-target=\"#todo-list\" hx-swap=\"beforeend\" autocomplete=\"off\"><fieldset role=\"group\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"description\" name=\"description\" placeholder=\"Description\" required> <button type=\"submit\">Submit</button></fieldset></form></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
