@@ -345,7 +345,7 @@ func todoListComponent(todoList []Todo) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></section><hr><section><h2>New Todo</h2><p>Add a new todo</p><form hx-post=\"/api/v2/create\" hx-target=\"#todo-list\" hx-swap=\"beforeend\" autocomplete=\"off\"><fieldset role=\"group\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"description\" name=\"description\" placeholder=\"Description\" required> <button type=\"submit\">Submit</button></fieldset></form></section>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></section><hr><section><h2>New Todo</h2><p>Create a new todo</p><form hx-post=\"/api/v2/create\" hx-target=\"#todo-list\" hx-swap=\"beforeend\" autocomplete=\"off\"><fieldset role=\"group\"><input type=\"text\" name=\"title\" placeholder=\"Title\" required> <input type=\"description\" name=\"description\" placeholder=\"Description\" required> <button type=\"submit\">Submit</button></fieldset></form></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

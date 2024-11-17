@@ -96,7 +96,7 @@ templ todoListComponent(todoList []Todo) {
 		<hr>
 		<section>
 			<h2>New Todo</h2>
-			<p>Add a new todo</p>
+			<p>Create a new todo</p>
 			<form hx-post="/api/v2/create" hx-target="#todo-list" hx-swap="beforeend" autocomplete="off">
 				<fieldset role="group">
 					<input type="text" name="title" placeholder="Title" required>
