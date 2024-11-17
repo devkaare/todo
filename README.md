@@ -12,7 +12,7 @@ A [Go compiler](https://go.dev/dl/) is **required** to run this program.
 
 ## Getting Started
 
-Start the webserver running the `go run main.go` command in the same directory as the main.go file.
+Start the web server running the `go run main.go` command in the same directory as the main.go file.
 
 ![view todo list/create todo](https://github.com/devkaare/todo/blob/main/docs/main.png)
 ![view specific todo](https://github.com/devkaare/todo/blob/main/docs/view.png)
