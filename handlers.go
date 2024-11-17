@@ -28,7 +28,7 @@ var todoList []Todo = []Todo{
 
 func getTodoByID(id int) (Todo, bool) {
 	for i, v := range todoList {
-		if id == v.ID {
+		if v.ID == id {
 			return todoList[i], true
 		}
 	}
@@ -121,7 +121,8 @@ func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Save updated todo
 	for i, v := range todoList {
-		if todo.ID == v.ID {
+		if v.ID == id {
+			todo.ID = id // Update todo.ID because the code below replaces the ENTIRE todo
 			todoList[i] = todo
 		}
 	}
@@ -145,7 +146,7 @@ func deleteTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Save updated todo
 	for i, v := range todoList {
-		if id == v.ID {
+		if v.ID == id {
 			// Delete todo at index from todoList
 			todoList = append(todoList[:i], todoList[i+1:]...)
 		}
