@@ -1,8 +1,8 @@
 all: build run
 
 build:
-	templ generate &\
-	go build -o bin/app
+	@templ generate
+	@go build ./cmd/api/main.go
 
 run:
-	./bin/app
+	@./main
