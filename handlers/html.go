@@ -130,14 +130,8 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, `
 			<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
-				<article>
-						<header>
-							<input type="text" name="title" value="%s" required>
-						</header>
-						<body>
-							<textarea name="description" required>%s</textarea>
-						</body>
-				</article>
+				<input type="text" name="title" value="%s" required>
+				<textarea name="description" required>%s</textarea>
 				<button type="submit" hx-patch="/api/v2/update/%d">Submit</button>
 			</form>
 		`,

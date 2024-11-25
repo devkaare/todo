@@ -22,7 +22,7 @@ templ TodosComponent(todos []database.Todo) {
 templ TodosCreateComponent() {
 	<form hx-post="/api/v2/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
 		<input type="text" name="title" placeholder="Title" required/>
-		<input type="description" name="description" placeholder="Description" required/>
+		<textarea name="description" placeholder="Description" required></textarea>
 		<button type="submit">Submit</button>
 	</form>
 }
