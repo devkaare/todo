@@ -1,10 +1,13 @@
 package main
 
 import (
-	"github.com/devkaare/todo/internal/server"
+	"github.com/devkaare/todo/server"
+	"log"
 )
 
 func main() {
 	// TODO: Add proper database stuff here and pass to server
-	server.New()
+	server := server.NewServer()
+
+	log.Fatal(server.ListenAndServe())
 }

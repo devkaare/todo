@@ -1,17 +1,17 @@
 package views
 
-import "github.com/devkaare/todo/internal/database"
+import "github.com/devkaare/todo/database"
 
 templ TodosConstructor(todos []database.Todo) {
-@base() {
-@TodosComponent(todos)
-@TodosCreateComponent()
-}
+	@base() {
+		@TodosComponent(todos)
+		@TodosCreateComponent()
+	}
 }
 
 templ TodoConstructor(todo database.Todo) {
-@base() {
-@TodoComponent(todo)
-@TodoUpdateComponent(todo.ID)
-}
+	@base() {
+		@TodoComponent(todo)
+		@TodoUpdateComponent(todo.ID)
+	}
 }

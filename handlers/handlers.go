@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/devkaare/todo/internal/database"
+	"github.com/devkaare/todo/database"
 	"github.com/devkaare/todo/views"
 
 	"github.com/go-chi/chi/v5"
@@ -195,7 +195,7 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	// Add todo to todoList
 	todoList = append(todoList, todo)
 
-	fmt.Fprintln(w, fmt.Sprintf("<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title))
+	fmt.Fprintf(w, "<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title)
 }
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {

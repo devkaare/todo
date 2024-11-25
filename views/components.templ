@@ -1,59 +1,52 @@
 package views
 
 import (
-"github.com/devkaare/todo/internal/database"
-"strconv"
+	"github.com/devkaare/todo/database"
+	"strconv"
 )
 
 templ TodosComponent(todos []database.Todo) {
-<section>
 	<ul id="list">
 		for _, t := range todos {
-		<li>
-			<!-- Templ requires href attributes to be inside templ.URL -->
-			<a href={ templ.URL(strconv.Itoa(t.ID)) }>
-				{ t.Title }
-				{ strconv.Itoa(t.ID) }
-			</a>
-		</li>
+			<li>
+				<!-- Templ requires href attributes to be inside templ.URL -->
+				<a href={ templ.URL(strconv.Itoa(t.ID)) }>
+					{ t.Title }
+					{ strconv.Itoa(t.ID) }
+				</a>
+			</li>
 		}
 	</ul>
-</section>
-<hr />
+	<hr/>
 }
 
 templ TodosCreateComponent() {
-<section>
-	<form hx-post="/api/v2/create" hx-target="list" hx-swap="beforeend" autocomplete="off">
-		<fieldset role="group">
-			<input type="text" name="title" placeholder="Title" required />
-			<input type="description" name="description" placeholder="Description" required />
-			<button type="submit">Submit</button>
-		</fieldset>
+	<form hx-post="/api/v2/create" hx-target="list" hx-swap="beforeend">
+		<input type="text" name="title" placeholder="Title" required/>
+		<input type="description" name="description" placeholder="Description" required/>
+		<button type="submit">Submit</button>
 	</form>
-</section>
 }
 
 templ TodoComponent(t database.Todo) {
-<article id="data">
-	<header>
-		<h1>{ t.Title } - { strconv.Itoa(t.ID) }</h1>
-	</header>
-
-	<body>
-		<p>{ t.Description }</p>
-	</body>
-</article>
-// FIXME: Needs to be put request
-<a href={ templ.URL("/api/v2/delete/" + strconv.Itoa(t.ID)) }>Delete</a>
+	<article>
+		<header>
+			<h1>{ t.Title }</h1>
+			<h2>{ strconv.Itoa(t.ID) }</h2>
+		</header>
+		<body>
+			<p>{ t.Description }</p>
+		</body>
+	</article>
+	<hr/>
+	// FIXME: Needs to be put request
+	<a href={ templ.URL("/api/v2/delete/" + strconv.Itoa(t.ID)) }>Delete</a>
 }
 
 templ TodoUpdateComponent(id int) {
-<form hx-patch={ "/api/v2/update/" + strconv.Itoa(id) } hx-swap="content" autocomplete="off">
-	<div class="gird">
-		<input type="text" name="title" placeholder="Title" required />
-		<input type="text" name="description" placeholder="Description" required />
-	</div>
-	<button type="submit">Submit</button>
-</form>
+	<form hx-patch={ "/api/v2/update/" + strconv.Itoa(id) } hx-target="content" hx-swap="innerHTML">
+		<input type="text" name="title" placeholder="Title" required/>
+		<input type="description" name="description" placeholder="Description" required/>
+		<button type="submit">Submit</button>
+	</form>
 }
