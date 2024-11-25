@@ -5,8 +5,8 @@ import "github.com/devkaare/todo/database"
 var todos []database.Todo = []database.Todo{
 	{
 		ID:          9223372036854775807,
-		Title:       "example title",
-		Description: "example description",
+		Title:       "Example title",
+		Description: "Example description",
 	},
 }
 
