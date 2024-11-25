@@ -24,6 +24,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	// Render handlers
 	r.Get("/", handlers.TodoListHandler)
 	r.Get("/{ID}", handlers.TodoHandler)
+	r.Get("/{ID}/edit", nil)
 
 	// API handlers
 	r.Get("/api/v1", handlers.GetTodoListHandler)

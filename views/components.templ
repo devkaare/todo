@@ -21,7 +21,7 @@ templ TodosComponent(todos []database.Todo) {
 }
 
 templ TodosCreateComponent() {
-	<form hx-post="/api/v2/create" hx-target="list" hx-swap="beforeend">
+	<form hx-post="/api/v2/create" hx-target="#list" hx-swap="beforeend">
 		<input type="text" name="title" placeholder="Title" required/>
 		<input type="description" name="description" placeholder="Description" required/>
 		<button type="submit">Submit</button>
@@ -37,14 +37,14 @@ templ TodoComponent(t database.Todo) {
 		<body>
 			<p>{ t.Description }</p>
 		</body>
+		<a hx-delete={ strconv.Itoa(t.ID) + "/edit" } hx-target="this" hx-swap="outerHTML">Edit</a>
+		<a hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) } hx-target="this" hx-swap="outerHTML">Delete</a>
 	</article>
 	<hr/>
-	// FIXME: Needs to be put request
-	<a href={ templ.URL("/api/v2/delete/" + strconv.Itoa(t.ID)) }>Delete</a>
 }
 
-templ TodoUpdateComponent(id int) {
-	<form hx-patch={ "/api/v2/update/" + strconv.Itoa(id) } hx-target="content" hx-swap="innerHTML">
+templ TodoUpdateComponent(t database.Todo) {
+	<form hx-patch={ "/api/v2/update/" + strconv.Itoa(t.ID) } hx-target="this" hx-swap="outerHTML">
 		<input type="text" name="title" placeholder="Title" required/>
 		<input type="description" name="description" placeholder="Description" required/>
 		<button type="submit">Submit</button>

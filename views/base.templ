@@ -9,7 +9,7 @@ templ base() {
 			<title>Todo | by Kaare</title>
 			<meta name="color-scheme" content="light dark"/>
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"/>
-			<script src="https://unpkg.com/htmx.org@2.0.3"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
 		</head>
 		<body>
 			<!-- https://github.com/picocss/pico/discussions/482#discussioncomment-10465121 -->
@@ -25,7 +25,7 @@ templ base() {
 						</ul>
 					</nav>
 				</header>
-				<section id="todo">
+				<section id="content">
 					{ children... }
 				</section>
 				<footer>

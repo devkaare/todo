@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
 	"math"
 	"math/rand/v2"
@@ -9,13 +9,17 @@ import (
 	"strconv"
 
 	"github.com/devkaare/todo/database"
+	"github.com/devkaare/todo/views"
 
 	"github.com/go-chi/chi/v5"
 )
 
-func GetTodoHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func TodosHandler(w http.ResponseWriter, r *http.Request) {
+	page := views.TodosConstructor(todos)
+	page.Render(context.Background(), w)
+}
 
+func TodoHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -27,36 +31,19 @@ func GetTodoHandler(w http.ResponseWriter, r *http.Request) {
 	todo, ok := getTodoByID(id)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "Todo with ID: %d does not exist\n", id)
 		return
 	}
 
-	encoder := json.NewEncoder(w)
-	if err = encoder.Encode(todo); err != nil {
-		w.WriteHeader(500)
-		panic("Failed to encode todo")
-	}
+	page := views.TodoConstructor(todo)
+	page.Render(context.Background(), w)
 }
 
-func GetTodoListHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	encoder := json.NewEncoder(w)
-	err := encoder.Encode(todos)
-	if err != nil {
-		w.WriteHeader(500)
-		panic("Failed to encode todoList")
-	}
-}
-
-func CreateTodoHandler(w http.ResponseWriter, r *http.Request) {
+func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	var todo database.Todo
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&todo); err != nil {
-		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to decode Todo")
-		return
-	}
+
+	todo.Title = r.FormValue("title")
+	todo.Description = r.FormValue("description")
 
 	// Generate unique ID
 	todo.ID = rand.IntN(math.MaxInt)
@@ -70,9 +57,11 @@ func CreateTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Add todo to todoList
 	todos = append(todos, todo)
+
+	fmt.Fprintf(w, "<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title)
 }
 
-func UpdateTodoHandler(w http.ResponseWriter, r *http.Request) {
+func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -89,18 +78,17 @@ func UpdateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var todo database.Todo
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&todo); err != nil {
-		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to decode Todo")
-		return
-	}
+	todo.ID = id
+	todo.Title = r.FormValue("title")
+	todo.Description = r.FormValue("description")
 
 	// Save updated todo
 	updateTodo(todo)
+
+	fmt.Fprintln(w, "<p>Successfully updated todo!</p>")
 }
 
-func DeleteTodoHandler(w http.ResponseWriter, r *http.Request) {
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -116,5 +104,7 @@ func DeleteTodoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = deleteTodoByID(id)
+	deleteTodoByID(id)
+
+	fmt.Fprintln(w, "<p>Successfully deleted todo!</p>")
 }

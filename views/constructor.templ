@@ -12,6 +12,6 @@ templ TodosConstructor(todos []database.Todo) {
 templ TodoConstructor(todo database.Todo) {
 	@base() {
 		@TodoComponent(todo)
-		@TodoUpdateComponent(todo.ID)
+		@TodoUpdateComponent(todo)
 	}
 }
