@@ -29,7 +29,7 @@ templ TodosCreateComponent() {
 }
 
 templ TodoComponent(t database.Todo) {
-	<article>
+	<article hx-target="this" hx-swap="outerHTML">
 		<header>
 			<h1>{ t.Title }</h1>
 			<h2>{ strconv.Itoa(t.ID) }</h2>
@@ -37,16 +37,7 @@ templ TodoComponent(t database.Todo) {
 		<body>
 			<p>{ t.Description }</p>
 		</body>
-		<a hx-delete={ strconv.Itoa(t.ID) + "/edit" } hx-target="this" hx-swap="outerHTML">Edit</a>
-		<a hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) } hx-target="this" hx-swap="outerHTML">Delete</a>
+		<a hx-get={ strconv.Itoa(t.ID) + "/edit" }>Edit</a>
+		<a hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) }>Delete</a>
 	</article>
-	<hr/>
-}
-
-templ TodoUpdateComponent(t database.Todo) {
-	<form hx-patch={ "/api/v2/update/" + strconv.Itoa(t.ID) } hx-target="this" hx-swap="outerHTML">
-		<input type="text" name="title" placeholder="Title" required/>
-		<input type="description" name="description" placeholder="Description" required/>
-		<button type="submit">Submit</button>
-	</form>
 }

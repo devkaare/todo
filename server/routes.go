@@ -22,12 +22,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	// Render handlers
-	r.Get("/", handlers.TodoListHandler)
+	r.Get("/", handlers.TodosHandler)
 	r.Get("/{ID}", handlers.TodoHandler)
-	r.Get("/{ID}/edit", nil)
+	r.Get("/{ID}/edit", handlers.EditHandler)
 
 	// API handlers
-	r.Get("/api/v1", handlers.GetTodoListHandler)
+	r.Get("/api/v1", handlers.GetTodosHandler)
 	r.Get("/api/v1/{ID}", handlers.GetTodoHandler)
 	r.Post("/api/v1/create", handlers.CreateTodoHandler)
 	r.Patch("/api/v1/update/{ID}", handlers.UpdateTodoHandler)

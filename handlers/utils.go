@@ -13,6 +13,7 @@ var todos []database.Todo = []database.Todo{
 func getTodoByID(id int) (database.Todo, bool) {
 	for i, todoFromTodos := range todos {
 		if todoFromTodos.ID == id {
+			// Return todo at current index in todos
 			return todos[i], true
 		}
 	}

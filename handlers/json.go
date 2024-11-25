@@ -20,32 +20,32 @@ func GetTodoHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	todo, ok := getTodoByID(id)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
 		return
 	}
 
 	encoder := json.NewEncoder(w)
 	if err = encoder.Encode(todo); err != nil {
 		w.WriteHeader(500)
-		panic("Failed to encode todo")
+		panic("failed to encode todo")
 	}
 }
 
-func GetTodoListHandler(w http.ResponseWriter, r *http.Request) {
+func GetTodosHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	encoder := json.NewEncoder(w)
 	err := encoder.Encode(todos)
 	if err != nil {
 		w.WriteHeader(500)
-		panic("Failed to encode todoList")
+		panic("failed to encode todolist")
 	}
 }
 
@@ -54,7 +54,7 @@ func CreateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&todo); err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to decode Todo")
+		fmt.Fprintln(w, "failed to decode todo")
 		return
 	}
 
@@ -64,7 +64,7 @@ func CreateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if ID exists
 	if _, ok := getTodoByID(todo.ID); ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d already exists\n", todo.ID)
+		fmt.Fprintf(w, "todo with id: %d already exists\n", todo.ID)
 		return
 	}
 
@@ -77,14 +77,14 @@ func UpdateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	// Check if ID exists
 	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
 		return
 	}
 
@@ -92,7 +92,7 @@ func UpdateTodoHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&todo); err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to decode Todo")
+		fmt.Fprintln(w, "failed to decode todo")
 		return
 	}
 
@@ -105,16 +105,19 @@ func DeleteTodoHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	// Check if ID exists
 	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
 		return
 	}
 
-	_ = deleteTodoByID(id)
+	if isDeleted := deleteTodoByID(id); !isDeleted {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "internal server error")
+	}
 }

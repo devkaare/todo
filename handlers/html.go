@@ -24,14 +24,14 @@ func TodoHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	todo, ok := getTodoByID(id)
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d does not exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d does not exist\n", id)
 		return
 	}
 
@@ -51,7 +51,7 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if ID exists
 	if _, ok := getTodoByID(todo.ID); ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d already exists\n", todo.ID)
+		fmt.Fprintf(w, "todo with id: %d already exists\n", todo.ID)
 		return
 	}
 
@@ -66,14 +66,14 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	// Check if ID exists
 	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
 		return
 	}
 
@@ -93,18 +93,52 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(param)
 	if err != nil {
 		w.WriteHeader(400)
-		fmt.Fprintln(w, "Failed to read ID parameter")
+		fmt.Fprintln(w, "failed to read id parameter")
 		return
 	}
 
 	// Check if ID exists
 	if _, ok := getTodoByID(id); !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w, "Todo with ID: %d doesn't exist\n", id)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
 		return
 	}
 
-	deleteTodoByID(id)
+	if isDeleted := deleteTodoByID(id); !isDeleted {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "internal server error")
+	}
 
 	fmt.Fprintln(w, "<p>Successfully deleted todo!</p>")
+}
+
+func EditHandler(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintln(w, "failed to read id parameter")
+		return
+	}
+
+	todo, ok := getTodoByID(id)
+	if !ok {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
+		return
+	}
+
+	fmt.Fprintf(w, `<form hx-target="this" hx-swap="outerHTML">
+				<header>
+					<label>Title</label>
+					<input type="text" name="title" value=%s required>
+				</header>
+				<body>
+					<label>Description</label>
+					<input type="text" name="description" value=%s required>
+				</body>
+				<a hx-patch="/api/v2/update/%d">Submit</a>
+				<!-- <button type="submit">Submit</button> -->
+			</form>`,
+		todo.Title, todo.Description, todo.ID)
 }
