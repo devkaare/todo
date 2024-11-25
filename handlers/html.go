@@ -58,7 +58,7 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	// Add todo to todoList
 	todos = append(todos, todo)
 
-	fmt.Fprintf(w, "<li><a href=\"/%[1]d\">%s#%[1]d</a></li>", todo.ID, todo.Title)
+	fmt.Fprintf(w, `<li><a href="%d">%s</a></li>`, todo.ID, todo.Title)
 }
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
@@ -128,17 +128,18 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, `<form hx-target="this" hx-swap="outerHTML">
-				<header>
-					<label>Title</label>
-					<input type="text" name="title" value=%s required>
-				</header>
-				<body>
-					<label>Description</label>
-					<input type="text" name="description" value=%s required>
-				</body>
-				<a hx-patch="/api/v2/update/%d">Submit</a>
-				<!-- <button type="submit">Submit</button> -->
-			</form>`,
+	fmt.Fprintf(w, `
+			<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
+				<article>
+						<header>
+							<input type="text" name="title" value="%s" required>
+						</header>
+						<body>
+							<textarea name="description" required>%s</textarea>
+						</body>
+				</article>
+				<button type="submit" hx-patch="/api/v2/update/%d">Submit</button>
+			</form>
+		`,
 		todo.Title, todo.Description, todo.ID)
 }

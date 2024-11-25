@@ -24,7 +24,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 	// Render handlers
 	r.Get("/", handlers.TodosHandler)
 	r.Get("/{ID}", handlers.TodoHandler)
-	r.Get("/{ID}/edit", handlers.EditHandler)
 
 	// API handlers
 	r.Get("/api/v1", handlers.GetTodosHandler)
@@ -33,6 +32,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.Patch("/api/v1/update/{ID}", handlers.UpdateTodoHandler)
 	r.Delete("/api/v1/delete/{ID}", handlers.DeleteTodoHandler)
 
+	r.Get("/api/v2/edit/{ID}", handlers.EditHandler)
 	r.Get("/api/v2/{ID}", handlers.GetTodoHandler)
 	r.Post("/api/v2/create", handlers.CreateHandler)
 	r.Patch("/api/v2/update/{ID}", handlers.UpdateHandler)

@@ -12,7 +12,6 @@ templ TodosComponent(todos []database.Todo) {
 				<!-- Templ requires href attributes to be inside templ.URL -->
 				<a href={ templ.URL(strconv.Itoa(t.ID)) }>
 					{ t.Title }
-					{ strconv.Itoa(t.ID) }
 				</a>
 			</li>
 		}
@@ -21,7 +20,7 @@ templ TodosComponent(todos []database.Todo) {
 }
 
 templ TodosCreateComponent() {
-	<form hx-post="/api/v2/create" hx-target="#list" hx-swap="beforeend">
+	<form hx-post="/api/v2/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
 		<input type="text" name="title" placeholder="Title" required/>
 		<input type="description" name="description" placeholder="Description" required/>
 		<button type="submit">Submit</button>
@@ -29,15 +28,16 @@ templ TodosCreateComponent() {
 }
 
 templ TodoComponent(t database.Todo) {
-	<article hx-target="this" hx-swap="outerHTML">
-		<header>
-			<h1>{ t.Title }</h1>
-			<h2>{ strconv.Itoa(t.ID) }</h2>
-		</header>
-		<body>
-			<p>{ t.Description }</p>
-		</body>
-		<a hx-get={ strconv.Itoa(t.ID) + "/edit" }>Edit</a>
-		<a hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) }>Delete</a>
-	</article>
+	<div hx-target="this" hx-swap="outerHTML">
+		<article>
+			<header>
+				<h1>{ t.Title }</h1>
+			</header>
+			<body>
+				<p>{ t.Description }</p>
+			</body>
+		</article>
+		<button type="submit" hx-get={ "/api/v2/edit/" + strconv.Itoa(t.ID) }>Edit</button>
+		<button type="submit" hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) }>Delete</button>
+	</div>
 }
