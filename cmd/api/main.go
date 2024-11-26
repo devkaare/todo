@@ -17,6 +17,5 @@ func main() {
 	// greeting := database.Greeting(dbInstance)
 	// log.Println(greeting)
 
-	log.Println("Starting server...")
 	log.Fatal(server.ListenAndServe())
 }
