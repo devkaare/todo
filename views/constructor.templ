@@ -2,14 +2,14 @@ package views
 
 import "github.com/devkaare/todo/database"
 
-templ TodosConstructor(todos []database.Todo) {
+templ TodosConstructor(todos []*database.Todo) {
 	@base() {
 		@TodosComponent(todos)
 		@TodosCreateComponent()
 	}
 }
 
-templ TodoConstructor(todo database.Todo) {
+templ TodoConstructor(todo *database.Todo) {
 	@base() {
 		@TodoComponent(todo)
 	}

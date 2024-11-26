@@ -12,6 +12,8 @@ import (
 
 type Server struct {
 	port int
+
+	// TODO: Add Database Connection field here
 }
 
 func NewServer() *http.Server {

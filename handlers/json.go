@@ -50,7 +50,7 @@ func GetTodosHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateTodoHandler(w http.ResponseWriter, r *http.Request) {
-	var todo database.Todo
+	todo := &database.Todo{}
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&todo); err != nil {
 		w.WriteHeader(400)
@@ -88,7 +88,7 @@ func UpdateTodoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var todo database.Todo
+	todo := &database.Todo{}
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&todo); err != nil {
 		w.WriteHeader(400)

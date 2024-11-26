@@ -2,22 +2,16 @@ package handlers
 
 import "github.com/devkaare/todo/database"
 
-var todos []database.Todo = []database.Todo{
-	{
-		ID:          9223372036854775807,
-		Title:       "Example title",
-		Description: "Example description",
-	},
-}
+var todos []*database.Todo
 
-func getTodoByID(id int) (database.Todo, bool) {
+func getTodoByID(id int) (*database.Todo, bool) {
 	for i, todoFromTodos := range todos {
 		if todoFromTodos.ID == id {
 			// Return todo at current index in todos
 			return todos[i], true
 		}
 	}
-	return database.Todo{}, false
+	return &database.Todo{}, false
 }
 
 func deleteTodoByID(id int) bool {
@@ -31,7 +25,7 @@ func deleteTodoByID(id int) bool {
 	return false
 }
 
-func updateTodo(todo database.Todo) bool {
+func updateTodo(todo *database.Todo) bool {
 	for i, todoFromTodos := range todos {
 		if todoFromTodos.ID == todo.ID {
 			// Update todo at current index in todos

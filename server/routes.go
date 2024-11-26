@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/devkaare/todo/handlers"
 	"net/http"
 
+	"github.com/devkaare/todo/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -21,11 +21,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	// Render handlers
 	r.Get("/", handlers.TodosHandler)
 	r.Get("/{ID}", handlers.TodoHandler)
 
-	// API handlers
 	r.Get("/api/v1", handlers.GetTodosHandler)
 	r.Get("/api/v1/{ID}", handlers.GetTodoHandler)
 	r.Post("/api/v1/create", handlers.CreateTodoHandler)

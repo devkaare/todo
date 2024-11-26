@@ -1,13 +1,22 @@
 package main
 
 import (
-	"github.com/devkaare/todo/server"
 	"log"
+
+	// "github.com/devkaare/todo/database"
+	"github.com/devkaare/todo/server"
 )
 
 func main() {
 	// TODO: Add proper database stuff here and pass to server
 	server := server.NewServer()
 
+	// log.Println("Connecting to database...")
+	// dbInstance := database.New()
+
+	// greeting := database.Greeting(dbInstance)
+	// log.Println(greeting)
+
+	log.Println("Starting server...")
 	log.Fatal(server.ListenAndServe())
 }

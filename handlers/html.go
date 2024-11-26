@@ -40,7 +40,7 @@ func TodoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateHandler(w http.ResponseWriter, r *http.Request) {
-	var todo database.Todo
+	todo := &database.Todo{}
 
 	todo.Title = r.FormValue("title")
 	todo.Description = r.FormValue("description")
@@ -77,7 +77,7 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var todo database.Todo
+	todo := &database.Todo{}
 	todo.ID = id
 	todo.Title = r.FormValue("title")
 	todo.Description = r.FormValue("description")

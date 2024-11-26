@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-templ TodosComponent(todos []database.Todo) {
+templ TodosComponent(todos []*database.Todo) {
 	<ul id="list">
 		for _, t := range todos {
 			<li>
@@ -27,7 +27,7 @@ templ TodosCreateComponent() {
 	</form>
 }
 
-templ TodoComponent(t database.Todo) {
+templ TodoComponent(t *database.Todo) {
 	<div hx-target="this" hx-swap="outerHTML">
 		<article>
 			<header>
