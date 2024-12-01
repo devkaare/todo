@@ -1,8 +1,6 @@
 package database
 
-import (
-	"context"
-)
+// import "context"
 
 type Todo struct {
 	ID          int    `json:"id"`
@@ -10,21 +8,18 @@ type Todo struct {
 	Description string `json:"description"`
 }
 
-func createTable(dbInstance service) error {
-	_, err := dbInstance.DB.Exec(context.Background(), "create table if not exists todos (id integer primary key, title text, description text)")
-	if err != nil {
-		return err
-	}
+// func createTable(dbInstance service) error {
+// 	_, err := dbInstance.DB.Exec(context.Background(), "create table if not exists todos (id integer primary key, title text, description text)")
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	return nil
+// }
 
-	return nil
-}
-
-// func getTodos(dbInstance service) ([]Todo, error)
-//
-// func createTodo(todo Todo, dbInstance service) (bool, error)
-//
-// func getTodoByID(id int, dbInstance service) (Todo, error)
-//
-// func updateTodoByID(id int, dbInstance service) (bool, error)
-//
-// func deleteTodoByID(id int, dbInstance service) (bool, error)
+// TODO: Add these:
+// getTodos() ([]Todo, error)
+// createTodo(todo Todo) (bool, error)
+// getTodoByID(id int) (Todo, error)
+// updateTodoByID(id int) (bool, error)
+// deleteTodoByID(id int) (bool, error)
