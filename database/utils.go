@@ -1,6 +1,11 @@
 package database
 
-// import "context"
+import (
+	// "context"
+
+	// "github.com/jackc/pgx/v5"
+	_ "github.com/joho/godotenv/autoload"
+)
 
 type Todo struct {
 	ID          int    `json:"id"`
@@ -8,7 +13,7 @@ type Todo struct {
 	Description string `json:"description"`
 }
 
-// func createTable(dbInstance service) error {
+// func CreateTable(dbInstance service) error {
 // 	_, err := dbInstance.DB.Exec(context.Background(), "create table if not exists todos (id integer primary key, title text, description text)")
 // 	if err != nil {
 // 		return err
@@ -18,8 +23,8 @@ type Todo struct {
 // }
 
 // TODO: Add these:
-// getTodos() ([]Todo, error)
-// createTodo(todo Todo) (bool, error)
-// getTodoByID(id int) (Todo, error)
-// updateTodoByID(id int) (bool, error)
-// deleteTodoByID(id int) (bool, error)
+// GetTodos(db *pgx.Conn) ([]Todo, error)
+// CreateTodo(todo Todo, db *pgx.Conn) (bool, error)
+// GetTodoByID(id int, db *pgx.Conn) (Todo, error)
+// UpdateTodoByID(id int, db *pgx.Conn) (bool, error)
+// DeleteTodoByID(id int, db *pgx.Conn) (bool, error)

@@ -3,7 +3,7 @@ all: build run
 build:
 	@echo "Building..."
 	@templ generate
-	@go build ./cmd/api/main.go
+	@go build -o ./main ./cmd/api/main.go
 
 run:
 	@echo "Running..."
