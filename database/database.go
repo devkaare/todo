@@ -1,6 +1,6 @@
 package database
 
-// TODO: Add a proper database
+// TODO: Add service utils
 
 // import (
 // 	"context"
@@ -8,11 +8,17 @@ package database
 // 	"log"
 // 	"os"
 //
-// 	"github.com/jackc/pgx/v5/pgxpool"
+//	"github.com/jackc/pgx/v5/pgxpool"
+//	// _ "github.com/jackc/pgx/v5/stdlib"
 // )
-//
+
+// type Service interface {
+//	Health() map[string]string
+//	Close() error
+// }
+
 // type service struct {
-// 	DB *pgxpool.Pool
+// 	db *pgxpool.Pool
 // }
 //
 // var (
@@ -23,22 +29,26 @@ package database
 // 	host     = os.Getenv("DB_HOST")
 // )
 //
-// func New() service {
+// func New() Service {
 // 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", username, password, host, port, database)
-// 	dbpool, err := pgxpool.New(context.Background(), connStr)
+// 	db, err := pgxpool.New(context.Background(), connStr)
 // 	if err != nil {
 // 		log.Fatal(err)
 // 	}
-// 	// defer dbpool.Close()
+// 	// defer db.Close()
 //
-// 	return service{
-// 		DB: dbpool,
+// 	return &service{
+// 		db: db,
 // 	}
 // }
 //
-// func Greeting(dbpool service) string {
+// func (s *service) Health() map[string]string
+//
+// func (s *service) Close() error
+//
+// func (s *service) Greeting() string {
 // 	var greeting string
-// 	if err := dbpool.DB.QueryRow(context.Background(), "select 'Hello, world!'").Scan(&greeting); err != nil {
+// 	if err := s.db.QueryRow(context.Background(), "select 'Hello, world!'").Scan(&greeting); err != nil {
 // 		log.Fatal(err)
 // 	}
 //

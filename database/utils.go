@@ -23,8 +23,8 @@ type Todo struct {
 // }
 
 // TODO: Add these:
-// GetTodos(db *pgx.Conn) ([]Todo, error)
-// CreateTodo(todo Todo, db *pgx.Conn) (bool, error)
-// GetTodoByID(id int, db *pgx.Conn) (Todo, error)
-// UpdateTodoByID(id int, db *pgx.Conn) (bool, error)
-// DeleteTodoByID(id int, db *pgx.Conn) (bool, error)
+// GetTodos(db *Service) ([]Todo, error)
+// CreateTodo(todo Todo, db *Service) (bool, error)
+// GetTodoByID(id int, db *Service) (Todo, error)
+// UpdateTodoByID(id int, db *Service) (bool, error)
+// DeleteTodoByID(id int, db *Service) (bool, error)
