@@ -10,7 +10,7 @@ import (
 func main() {
 	server := server.NewServer()
 
-	// TODO: Add database
+	// TODO: Add a new database
 
 	log.Fatal(server.ListenAndServe())
 }
