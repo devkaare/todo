@@ -8,10 +8,9 @@ import (
 )
 
 func main() {
-	// TODO: Add proper database stuff here and pass to server
 	server := server.NewServer()
 
-	// TODO: dbInstance := database.New()
+	// TODO: Add database
 
 	log.Fatal(server.ListenAndServe())
 }
