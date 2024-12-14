@@ -11,7 +11,7 @@ func main() {
 	// TODO: Add proper database stuff here and pass to server
 	server := server.NewServer()
 
-	// dbInstance := database.New()
+	// TODO: dbInstance := database.New()
 
 	log.Fatal(server.ListenAndServe())
 }
