@@ -8,11 +8,9 @@ This is just a **small project**, which I might use some day haha!
 
 ## Requirements
 
-A [Go compiler](https://go.dev/dl/) is **required** to run this program.
+## Usage
 
-## Getting Started
-
-Start the web server running the `go run main.go` command in the same directory as the main.go file.
+`make docker-run`
 
 ![view todo list/create todo](https://github.com/devkaare/todo/blob/main/docs/main.png)
 ![view specific todo](https://github.com/devkaare/todo/blob/main/docs/view.png)
