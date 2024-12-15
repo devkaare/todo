@@ -87,7 +87,8 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	// Add todo to todoList
 	todos = append(todos, todo)
 
-	fmt.Fprintf(w, `<li><a href="%d">%s</a></li>`, todo.ID, todo.Title)
+	content := views.TodoList(todo)
+	content.Render(context.Background(), w)
 }
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +158,7 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	content := views.TodoEditComponent(todo)
+	content := views.TodoByIDForm(todo)
 	content.Render(context.Background(), w)
 }
 

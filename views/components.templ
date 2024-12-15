@@ -3,32 +3,13 @@ package views
 import (
 	"github.com/devkaare/todo/database"
 	"strconv"
-	"fmt"
 )
 
-templ TodosComponent(todos []*database.Todo) {
-	<ul id="list">
-		for _, t := range todos {
-			<li>
-				<!-- Templ requires href attributes to be inside templ.URL -->
-				<a href={ templ.URL(fmt.Sprintf("/todo/%s", strconv.Itoa(t.ID))) }>
-					{ t.Title }
-				</a>
-			</li>
-		}
-	</ul>
-	<hr/>
+templ TodoList(t *database.Todo) {
+	<li><a href={ templ.SafeURL("/todo/" + strconv.Itoa(t.ID)) }>{ t.Title }</a></li>
 }
 
-templ TodoCreateComponent() {
-	<form hx-post="/todo/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
-		<input type="text" name="title" placeholder="Title" required/>
-		<textarea name="description" placeholder="Description" required></textarea>
-		<button type="submit">Submit</button>
-	</form>
-}
-
-templ TodoByIDComponent(t *database.Todo) {
+templ TodoByID(t *database.Todo) {
 	<div hx-target="this" hx-swap="outerHTML">
 		<article>
 			<header>
@@ -43,10 +24,27 @@ templ TodoByIDComponent(t *database.Todo) {
 	</div>
 }
 
-templ TodoEditComponent(t *database.Todo) {
+templ TodoByIDForm(t *database.Todo) {
 	<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
-		<input type="text" name="title" value="%s" required/>
-		<textarea name="description" required>%s</textarea>
-		<button type="submit" hx-patch="/api/v2/update/%d">Submit</button>
+		<input type="text" name="title" value={ t.Title } required/>
+		<textarea name="description" required>{ t.Description }</textarea>
+		<button type="submit" hx-patch={ "/todo/update/" + strconv.Itoa(t.ID) }>Submit</button>
+	</form>
+}
+
+templ Todos(ts []*database.Todo) {
+	<ul id="list">
+		for _, t := range ts {
+			@TodoList(t)
+		}
+	</ul>
+	<hr/>
+}
+
+templ TodosForm() {
+	<form hx-post="/todo/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
+		<input type="text" name="title" placeholder="Title" required/>
+		<textarea name="description" placeholder="Description" required></textarea>
+		<button type="submit">Submit</button>
 	</form>
 }

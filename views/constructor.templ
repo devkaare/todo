@@ -2,15 +2,15 @@ package views
 
 import "github.com/devkaare/todo/database"
 
-templ TodosConstructor(todos []*database.Todo) {
+templ TodosConstructor(ts []*database.Todo) {
 	@base() {
-		@TodosComponent(todos)
-		@TodoCreateComponent()
+		@Todos(ts)
+		@TodosForm()
 	}
 }
 
-templ TodoByIDConstructor(todo *database.Todo) {
+templ TodoByIDConstructor(t *database.Todo) {
 	@base() {
-		@TodoByIDComponent(todo)
+		@TodoByID(t)
 	}
 }
