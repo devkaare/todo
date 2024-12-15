@@ -14,12 +14,41 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func TodosHandler(w http.ResponseWriter, r *http.Request) {
-	page := views.TodosConstructor(todos)
-	page.Render(context.Background(), w)
+var todos []*database.Todo
+
+func getTodoByID(id int) (*database.Todo, bool) {
+	for i, todoFromTodos := range todos {
+		if todoFromTodos.ID == id {
+			// Return todo at current index in todos
+			return todos[i], true
+		}
+	}
+	return &database.Todo{}, false
 }
 
-func TodoHandler(w http.ResponseWriter, r *http.Request) {
+func deleteTodoByID(id int) bool {
+	for i, todoFromTodos := range todos {
+		if todoFromTodos.ID == id {
+			// Delete todo at current index in todos
+			todos = append(todos[:i], todos[i+1:]...)
+			return true
+		}
+	}
+	return false
+}
+
+func updateTodo(todo *database.Todo) bool {
+	for i, todoFromTodos := range todos {
+		if todoFromTodos.ID == todo.ID {
+			// Update todo at current index in todos
+			todos[i] = todo
+			return true
+		}
+	}
+	return false
+}
+
+func TodoByIDHandler(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "ID")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -35,7 +64,7 @@ func TodoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := views.TodoConstructor(todo)
+	page := views.TodoByIDConstructor(todo)
 	page.Render(context.Background(), w)
 }
 
@@ -128,12 +157,11 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, `
-			<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
-				<input type="text" name="title" value="%s" required>
-				<textarea name="description" required>%s</textarea>
-				<button type="submit" hx-patch="/api/v2/update/%d">Submit</button>
-			</form>
-		`,
-		todo.Title, todo.Description, todo.ID)
+	content := views.TodoEditComponent(todo)
+	content.Render(context.Background(), w)
+}
+
+func TodosHandler(w http.ResponseWriter, r *http.Request) {
+	page := views.TodosConstructor(todos)
+	page.Render(context.Background(), w)
 }

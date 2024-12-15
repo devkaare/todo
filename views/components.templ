@@ -3,6 +3,7 @@ package views
 import (
 	"github.com/devkaare/todo/database"
 	"strconv"
+	"fmt"
 )
 
 templ TodosComponent(todos []*database.Todo) {
@@ -10,7 +11,7 @@ templ TodosComponent(todos []*database.Todo) {
 		for _, t := range todos {
 			<li>
 				<!-- Templ requires href attributes to be inside templ.URL -->
-				<a href={ templ.URL(strconv.Itoa(t.ID)) }>
+				<a href={ templ.URL(fmt.Sprintf("/todo/%s", strconv.Itoa(t.ID))) }>
 					{ t.Title }
 				</a>
 			</li>
@@ -19,15 +20,15 @@ templ TodosComponent(todos []*database.Todo) {
 	<hr/>
 }
 
-templ TodosCreateComponent() {
-	<form hx-post="/api/v2/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
+templ TodoCreateComponent() {
+	<form hx-post="/todo/create" hx-target="#list" hx-swap="beforeend" autocomplete="off">
 		<input type="text" name="title" placeholder="Title" required/>
 		<textarea name="description" placeholder="Description" required></textarea>
 		<button type="submit">Submit</button>
 	</form>
 }
 
-templ TodoComponent(t *database.Todo) {
+templ TodoByIDComponent(t *database.Todo) {
 	<div hx-target="this" hx-swap="outerHTML">
 		<article>
 			<header>
@@ -37,7 +38,15 @@ templ TodoComponent(t *database.Todo) {
 				<p>{ t.Description }</p>
 			</body>
 		</article>
-		<button type="submit" hx-get={ "/api/v2/edit/" + strconv.Itoa(t.ID) }>Edit</button>
-		<button type="submit" hx-delete={ "/api/v2/delete/" + strconv.Itoa(t.ID) }>Delete</button>
+		<button type="submit" hx-get={ "/todo/edit/" + strconv.Itoa(t.ID) }>Edit</button>
+		<button type="submit" hx-delete={ "/todo/delete/" + strconv.Itoa(t.ID) }>Delete</button>
 	</div>
+}
+
+templ TodoEditComponent(t *database.Todo) {
+	<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
+		<input type="text" name="title" value="%s" required/>
+		<textarea name="description" required>%s</textarea>
+		<button type="submit" hx-patch="/api/v2/update/%d">Submit</button>
+	</form>
 }

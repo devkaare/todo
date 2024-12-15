@@ -5,12 +5,12 @@ import "github.com/devkaare/todo/database"
 templ TodosConstructor(todos []*database.Todo) {
 	@base() {
 		@TodosComponent(todos)
-		@TodosCreateComponent()
+		@TodoCreateComponent()
 	}
 }
 
-templ TodoConstructor(todo *database.Todo) {
+templ TodoByIDConstructor(todo *database.Todo) {
 	@base() {
-		@TodoComponent(todo)
+		@TodoByIDComponent(todo)
 	}
 }

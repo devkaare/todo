@@ -22,19 +22,11 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	r.Get("/", handlers.TodosHandler)
-	r.Get("/{ID}", handlers.TodoHandler)
-
-	r.Get("/api/v1", handlers.GetTodosHandler)
-	r.Get("/api/v1/{ID}", handlers.GetTodoHandler)
-	r.Post("/api/v1/create", handlers.CreateTodoHandler)
-	r.Patch("/api/v1/update/{ID}", handlers.UpdateTodoHandler)
-	r.Delete("/api/v1/delete/{ID}", handlers.DeleteTodoHandler)
-
-	r.Get("/api/v2/edit/{ID}", handlers.EditHandler)
-	r.Get("/api/v2/{ID}", handlers.GetTodoHandler)
-	r.Post("/api/v2/create", handlers.CreateHandler)
-	r.Patch("/api/v2/update/{ID}", handlers.UpdateHandler)
-	r.Delete("/api/v2/delete/{ID}", handlers.DeleteHandler)
+	r.Get("/todo/{ID}", handlers.TodoByIDHandler)
+	r.Get("/todo/edit/{ID}", handlers.EditHandler)
+	r.Post("/todo/create", handlers.CreateHandler)
+	r.Patch("/todo/update/{ID}", handlers.UpdateHandler)
+	r.Delete("/todo/delete/{ID}", handlers.DeleteHandler)
 
 	return r
 }
