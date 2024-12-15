@@ -1,7 +1,7 @@
 package server
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -25,8 +25,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 		w.WriteHeader(http.StatusOK)
 	})
 
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		jsonResp, _ := json.Marshal(s.db.Health())
+		_, _ = w.Write(jsonResp)
+	})
+
 	r.Route("/todo", func(r chi.Router) {
-		r.Post("/", s.CreateHandler) // curl -X POST localhost:8080/todo/
+		r.Post("/", s.CreateHandler)
 		r.Get("/", s.ListHandler)
 		r.Get("/{ID}", s.GetByIDHandler)
 		r.Put("/{ID}", s.UpdateByIDHandler)
@@ -37,7 +42,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 }
 
 func (s *Server) CreateHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// todo := &database.Todo{}
 	//
 	// todo.Title = r.FormValue("title")
@@ -61,13 +65,11 @@ func (s *Server) CreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) ListHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// page := views.TodosConstructor(todos)
 	// page.Render(context.Background(), w)
 }
 
 func (s *Server) GetByIDHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// param := chi.URLParam(r, "ID")
 	// id, err := strconv.Atoi(param)
 	// if err != nil {
@@ -88,7 +90,6 @@ func (s *Server) GetByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) UpdateByIDHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// param := chi.URLParam(r, "ID")
 	// id, err := strconv.Atoi(param)
 	// if err != nil {
@@ -116,7 +117,6 @@ func (s *Server) UpdateByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) DeleteByIDHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// param := chi.URLParam(r, "ID")
 	// id, err := strconv.Atoi(param)
 	// if err != nil {
@@ -141,7 +141,6 @@ func (s *Server) DeleteByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) EditHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method, r.RequestURI)
 	// param := chi.URLParam(r, "ID")
 	// id, err := strconv.Atoi(param)
 	// if err != nil {

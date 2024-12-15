@@ -9,7 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	// "github.com/devkaare/todo/database"
 	"github.com/devkaare/todo/server"
 )
 
@@ -45,5 +44,6 @@ func main() {
 	}
 
 	<-done
+
 	log.Println("Graceful shutdown complete.")
 }
