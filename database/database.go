@@ -72,12 +72,12 @@ func (s *service) Close() error {
 	return s.db.Close()
 }
 
-func (s *service) Greeting() error {
-	var greeting string
-	if err := s.db.QueryRow("select 'Hello, world!'").Scan(&greeting); err != nil {
-		return err
-	}
-	log.Println(greeting)
-
-	return nil
-}
+// func (s *service) Greeting() error {
+// 	var greeting string
+// 	if err := s.db.QueryRow("select 'Hello, world!'").Scan(&greeting); err != nil {
+// 		return err
+// 	}
+// 	log.Println(greeting)
+//
+// 	return nil
+// }

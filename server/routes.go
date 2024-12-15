@@ -27,7 +27,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		jsonResp, _ := json.Marshal(s.db.Health())
-		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write(jsonResp)
 	})
 
