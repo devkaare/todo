@@ -1,6 +1,12 @@
 package views
 
-templ base() {
+type todo struct {
+	ID          int
+	Title       string
+	Description string
+}
+
+templ Base() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
