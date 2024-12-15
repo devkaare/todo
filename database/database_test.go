@@ -21,12 +21,13 @@ func mustStartPostgresContainer() (func(context.Context) error, error) {
 	dbContainer, err := postgres.Run(
 		context.Background(),
 		"postgres:latest",
-		postgres.WithDatabase(dbUser),
+		postgres.WithDatabase(dbName),
 		postgres.WithUsername(dbUser),
+		postgres.WithPassword(dbPwd),
 		testcontainers.WithWaitStrategy(
 			wait.ForLog("database system is ready to accept connections").
 				WithOccurrence(2).
-				WithStartupTimeout(5*time.Second)),
+				WithStartupTimeout(10*time.Second)),
 	)
 	if err != nil {
 		return nil, err
@@ -89,7 +90,7 @@ func TestHealth(t *testing.T) {
 func TestClose(t *testing.T) {
 	srv := New()
 
-	if srv.Close() == nil {
+	if srv.Close() != nil {
 		t.Fatalf("expected Close() to return nil")
 	}
 }
