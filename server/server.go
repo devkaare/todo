@@ -7,19 +7,22 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/devkaare/todo/database"
 	_ "github.com/joho/godotenv/autoload"
 )
 
 type Server struct {
 	port int
 
-	// TODO: Add Database Connection field here
+	db database.Service
 }
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
 		port: port,
+
+		db: database.New(),
 	}
 
 	// Declare Server config
