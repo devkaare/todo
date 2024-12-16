@@ -1,3 +1,9 @@
+// TODO:
+// 1. Add more tests for DB.
+// 2. Update handlers to support new DB.
+// 3. Update handlers to render using templ.
+// 4. Update views structure.
+
 package server
 
 import (
