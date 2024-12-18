@@ -17,7 +17,8 @@ func TodoWebHandler(w http.ResponseWriter, r *http.Request) {
 
 	todo := &model.Todo{}
 
-	todo.ID, err = strconv.Atoi(chi.URLParam(r, "ID"))
+	URLParam, _ := strconv.Atoi(chi.URLParam(r, "ID"))
+	todo.ID = uint32(URLParam)
 	if err != nil {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 	}

@@ -1,7 +1,7 @@
 package model
 
 type Todo struct {
-	ID          int
+	ID          uint32
 	Title       string
 	Description string
 }

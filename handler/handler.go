@@ -3,7 +3,9 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	// "fmt"
 	"log"
+	"math"
 	"math/rand/v2"
 	"net/http"
 
@@ -26,19 +28,14 @@ func (t *Todo) Create(w http.ResponseWriter, r *http.Request) {
 
 	todo.Title = r.FormValue("title")
 	todo.Description = r.FormValue("description")
-	todo.ID = rand.Int()
+	todo.ID = rand.Uint32N(math.MaxUint8)
 
-	exists, err := t.Repo.GetTodoByID(todo.ID)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	if exists.ID >= 0 {
-		log.Println(err)
-		w.WriteHeader(http.StatusConflict)
-		return
-	}
+	// _, err := t.Repo.GetTodoByID(todo.ID)
+	// if err != nil && err != fmt.Errorf("GetTodoByID %d: no such todo", todo.ID) {
+	// 	log.Println(err)
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
 
 	if err := t.Repo.CreateTodo(todo); err != nil {
 		log.Println(err)

@@ -41,7 +41,7 @@ func (r *PostgresRepo) Close() error {
 
 func (r *PostgresRepo) CreateTodo(todo *model.Todo) error {
 	_, err := r.Client.Exec(
-		"INSERT INTO todo (id, title, description) VALUES (?, ?, ?)",
+		"INSERT INTO todo (id, title, description) VALUES ($1, $2, $3)",
 		todo.ID, todo.Title, todo.Description,
 	)
 	if err != nil {
@@ -73,10 +73,11 @@ func (r *PostgresRepo) GetTodoList() ([]model.Todo, error) {
 	return todos, nil
 }
 
-func (r *PostgresRepo) GetTodoByID(id int) (model.Todo, error) {
+func (r *PostgresRepo) GetTodoByID(id uint32) (model.Todo, error) {
 	var todo model.Todo
+	// todo := &model.Todo{}
 
-	row := r.Client.QueryRow("SELECT * FROM todo WHERE id = ?")
+	row := r.Client.QueryRow("SELECT * FROM todo WHERE id = $1", id)
 	if err := row.Scan(&todo.ID, &todo.Title, &todo.Description); err != nil {
 		if err == sql.ErrNoRows {
 			return todo, fmt.Errorf("GetTodoByID %d: no such todo", id)
@@ -95,8 +96,8 @@ func (r *PostgresRepo) UpdateTodoByID(todo *model.Todo) error {
 	return nil
 }
 
-func (r *PostgresRepo) DeleteTodoByID(id int) error {
-	result, err := r.Client.Exec("DELETE FROM todo WHERE id = ?")
+func (r *PostgresRepo) DeleteTodoByID(id uint32) error {
+	result, err := r.Client.Exec("DELETE FROM todo WHERE id = $1", id)
 	if err != nil {
 		return fmt.Errorf("DeleteTodoByID %d, %v", id, err)
 	}
