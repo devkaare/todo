@@ -1,12 +1,15 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
+	"log"
 	"math/rand/v2"
 	"net/http"
 
 	"github.com/devkaare/todo/model"
 	"github.com/devkaare/todo/repository/todo"
+	"github.com/devkaare/todo/views"
 )
 
 type Todo struct {
@@ -27,25 +30,33 @@ func (t *Todo) Create(w http.ResponseWriter, r *http.Request) {
 
 	exists, err := t.Repo.GetTodoByID(todo.ID)
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if exists.ID <= 0 {
+	if exists.ID >= 0 {
+		log.Println(err)
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
 	if err := t.Repo.CreateTodo(todo); err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	// content := views.TodoList(todo)
 	// content.Render(context.Background(), w)
+	views.TodoPost(todo).Render(context.Background(), w)
 }
 
 func (t *Todo) List(w http.ResponseWriter, r *http.Request) {
-	// page := views.TodosConstructor(todos)
-	// page.Render(context.Background(), w)
+	todos, err := t.Repo.GetTodoList()
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	views.TodoForm(todos).Render(context.Background(), w)
 }
 
 func (t *Todo) GetByID(w http.ResponseWriter, r *http.Request) {

@@ -30,7 +30,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	r.Get("/", s.HelloWorldHandler)
+	// r.Get("/", s.HelloWorldHandler)
+
+	// r.Get("/", templ.Handler(views.HelloForm()).ServeHTTP)
+	// r.Post("/hello", views.HelloWebHandler)
 
 	r.Route("/todos", s.RegisterTodoRoutes)
 

@@ -1,11 +1,5 @@
 package views
 
-type todo struct {
-	ID          int
-	Title       string
-	Description string
-}
-
 templ Base() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -26,7 +20,7 @@ templ Base() {
 					<nav>
 						<ul>
 							<li>
-								<a href="/">Overview</a>
+								<a href="/todos">Overview</a>
 							</li>
 						</ul>
 					</nav>
