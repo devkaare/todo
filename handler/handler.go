@@ -31,8 +31,7 @@ func (t *Todo) Create(w http.ResponseWriter, r *http.Request) {
 		Title:       r.FormValue("title"),
 		Description: r.FormValue("description"),
 	}
-	_, err := t.Repo.GetTodoByID(todo.ID)
-	if err != nil && err != errors.New("todo not found") {
+	if _, err := t.Repo.GetTodoByID(todo.ID); err == errors.New("todo not found") && err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
