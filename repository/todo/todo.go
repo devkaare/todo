@@ -3,6 +3,7 @@ package todo
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -73,14 +74,13 @@ func (r *PostgresRepo) GetTodoList() ([]model.Todo, error) {
 	return todos, nil
 }
 
-func (r *PostgresRepo) GetTodoByID(id uint32) (model.Todo, error) {
-	var todo model.Todo
-	// todo := &model.Todo{}
+func (r *PostgresRepo) GetTodoByID(id uint32) (*model.Todo, error) {
+	todo := &model.Todo{}
 
 	row := r.Client.QueryRow("SELECT * FROM todo WHERE id = $1", id)
 	if err := row.Scan(&todo.ID, &todo.Title, &todo.Description); err != nil {
 		if err == sql.ErrNoRows {
-			return todo, fmt.Errorf("GetTodoByID %d: no such todo", id)
+			return todo, errors.New("todo not found")
 		}
 		return todo, fmt.Errorf("GetTodoByID %d: %v", id, err)
 	}

@@ -51,6 +51,7 @@ func (s *Server) RegisterTodoRoutes(r chi.Router) {
 	r.Post("/", todoHandler.Create)
 	r.Get("/", todoHandler.List)
 	r.Get("/{ID}", todoHandler.GetByID)
+	r.Get("/edit/{ID}", todoHandler.EditByID)
 	r.Put("/{ID}", todoHandler.UpdateByID)
 	r.Delete("/{ID}", todoHandler.DeleteByID)
 }

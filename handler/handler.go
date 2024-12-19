@@ -3,15 +3,17 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	// "fmt"
+	"errors"
 	"log"
-	"math"
 	"math/rand/v2"
 	"net/http"
+	"strconv"
 
 	"github.com/devkaare/todo/model"
 	"github.com/devkaare/todo/repository/todo"
 	"github.com/devkaare/todo/views"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type Todo struct {
@@ -24,26 +26,23 @@ func (t *Todo) Health(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *Todo) Create(w http.ResponseWriter, r *http.Request) {
-	todo := &model.Todo{}
-
-	todo.Title = r.FormValue("title")
-	todo.Description = r.FormValue("description")
-	todo.ID = rand.Uint32N(math.MaxUint8)
-
-	// _, err := t.Repo.GetTodoByID(todo.ID)
-	// if err != nil && err != fmt.Errorf("GetTodoByID %d: no such todo", todo.ID) {
-	// 	log.Println(err)
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+	todo := &model.Todo{
+		ID:          rand.Uint32N(2147483647),
+		Title:       r.FormValue("title"),
+		Description: r.FormValue("description"),
+	}
+	_, err := t.Repo.GetTodoByID(todo.ID)
+	if err != nil && err != errors.New("todo not found") {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	if err := t.Repo.CreateTodo(todo); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	// content := views.TodoList(todo)
-	// content.Render(context.Background(), w)
 	views.TodoPost(todo).Render(context.Background(), w)
 }
 
@@ -52,97 +51,85 @@ func (t *Todo) List(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 	views.TodoForm(todos).Render(context.Background(), w)
 }
 
 func (t *Todo) GetByID(w http.ResponseWriter, r *http.Request) {
-	// param := chi.URLParam(r, "ID")
-	// id, err := strconv.Atoi(param)
-	// if err != nil {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintln(w, "failed to read id parameter")
-	// 	return
-	// }
-	//
-	// todo, ok := getTodoByID(id)
-	// if !ok {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintf(w, "todo with id: %d does not exist\n", id)
-	// 	return
-	// }
-	//
-	// page := views.TodoByIDConstructor(todo)
-	// page.Render(context.Background(), w)
+	URLParam := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(URLParam)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	todo, err := t.Repo.GetTodoByID(uint32(id))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	views.TodoByIDForm(todo).Render(context.Background(), w)
 }
 
 func (t *Todo) UpdateByID(w http.ResponseWriter, r *http.Request) {
-	// param := chi.URLParam(r, "ID")
-	// id, err := strconv.Atoi(param)
-	// if err != nil {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintln(w, "failed to read id parameter")
-	// 	return
-	// }
-	//
-	// // Check if ID exists
-	// if _, ok := getTodoByID(id); !ok {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
-	// 	return
-	// }
-	//
-	// todo := &database.Todo{}
-	// todo.ID = id
-	// todo.Title = r.FormValue("title")
-	// todo.Description = r.FormValue("description")
-	//
-	// // Save updated todo
-	// updateTodo(todo)
-	//
-	// fmt.Fprintln(w, "<p>Successfully updated todo!</p>")
+	URLParam := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(URLParam)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	todo := &model.Todo{
+		ID:          uint32(id),
+		Title:       r.FormValue("title"),
+		Description: r.FormValue("description"),
+	}
+
+	if err := t.Repo.UpdateTodoByID(todo); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("<p>Successfully updated todo!</p>"))
 }
 
 func (t *Todo) DeleteByID(w http.ResponseWriter, r *http.Request) {
-	// param := chi.URLParam(r, "ID")
-	// id, err := strconv.Atoi(param)
-	// if err != nil {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintln(w, "failed to read id parameter")
-	// 	return
-	// }
-	//
-	// // Check if ID exists
-	// if _, ok := getTodoByID(id); !ok {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
-	// 	return
-	// }
-	//
-	// if isDeleted := deleteTodoByID(id); !isDeleted {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintln(w, "internal server error")
-	// }
-	//
-	// fmt.Fprintln(w, "<p>Successfully deleted todo!</p>")
+	URLParam := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(URLParam)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := t.Repo.DeleteTodoByID(uint32(id)); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("<p>Successfully deleted todo!</p>"))
 }
 
-func (t *Todo) Edit(w http.ResponseWriter, r *http.Request) {
-	// param := chi.URLParam(r, "ID")
-	// id, err := strconv.Atoi(param)
-	// if err != nil {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintln(w, "failed to read id parameter")
-	// 	return
-	// }
-	//
-	// todo, ok := getTodoByID(id)
-	// if !ok {
-	// 	w.WriteHeader(400)
-	// 	fmt.Fprintf(w, "todo with id: %d doesn't exist\n", id)
-	// 	return
-	// }
-	//
-	// content := views.TodoByIDForm(todo)
-	// content.Render(context.Background(), w)
+func (t *Todo) EditByID(w http.ResponseWriter, r *http.Request) {
+	URLParam := chi.URLParam(r, "ID")
+	id, err := strconv.Atoi(URLParam)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	todo, err := t.Repo.GetTodoByID(uint32(id))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	views.TodoByIDPost(todo).Render(context.Background(), w)
 }
