@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev # You can change this to `prod`
+      target: prod # You can change this to `prod`
     restart: unless-stopped
     ports:
       - ${PORT}:${PORT}

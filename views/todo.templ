@@ -1,9 +1,8 @@
 package views
 
 import (
-	"strconv"
-
 	"github.com/devkaare/todo/model"
+	"fmt"
 )
 
 templ TodoForm(todos []model.Todo) {
@@ -24,7 +23,7 @@ templ TodoForm(todos []model.Todo) {
 
 templ TodoPost(t *model.Todo) {
 	<li>
-		<a href={ templ.SafeURL("/todos/" + strconv.Itoa(int(t.ID))) }>
+		<a href={ templ.SafeURL(fmt.Sprintf("/todos/%d", t.ID)) }>
 			{ t.Title }
 		</a>
 	</li>
@@ -41,8 +40,8 @@ templ TodoByIDForm(t *model.Todo) {
 					<p>{ t.Description }</p>
 				</body>
 			</article>
-			<button type="submit" hx-get={ "/todos/edit/" + strconv.Itoa(int(t.ID)) }>Edit</button>
-			<button type="submit" hx-delete={ "/todos/" + strconv.Itoa(int(t.ID)) }>Delete</button>
+			<button type="submit" hx-get={ fmt.Sprintf("/todos/edit/%d", t.ID) }>Edit</button>
+			<button type="submit" hx-delete={ fmt.Sprintf("/todos/%d", t.ID) }>Delete</button>
 		</div>
 	}
 }
@@ -51,6 +50,6 @@ templ TodoByIDPost(t *model.Todo) {
 	<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
 		<input type="text" name="title" value={ t.Title } required/>
 		<textarea name="description" required>{ t.Description }</textarea>
-		<button type="submit" hx-put={ "/todos/" + strconv.Itoa(int(t.ID)) }>Submit</button>
+		<button type="submit" hx-put={ fmt.Sprintf("/todos/%d", t.ID) }>Submit</button>
 	</form>
 }
