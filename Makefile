@@ -1,4 +1,4 @@
-# Simple Makefile for a Go project
+MAIN_FILE = cmd/api/main.go
 
 # Build the application
 all: build test
@@ -21,14 +21,19 @@ build: templ-install
 	@echo "Building..."
 	@templ generate
 	
-	@go build -o main cmd/api/main.go
+	@go build -o main $(MAIN_FILE)
 
 # Run the application
 run:
-	@go run cmd/api/main.go
+	@go run $(MAIN_FILE)
+	#
 # Create DB container
-docker-run:
+docker-build:
 	@docker compose up --build
+
+# Run DB container
+docker-run:
+	@docker compose up
 
 # Shutdown DB container
 docker-down:
@@ -38,15 +43,19 @@ docker-down:
 test:
 	@echo "Testing..."
 	@go test ./... -v
+
 # Integrations Tests for the application
 itest:
 	@echo "Running integration tests..."
 	@go test ./internal/database -v
 
-# Clean the binary
+# Clean the junk
 clean:
 	@echo "Cleaning..."
 	@rm -f main
+	@go mod tidy
+
+	@rm -rf views/*_templ.go
 
 # Live Reload
 watch:
@@ -65,4 +74,4 @@ watch:
             fi; \
         fi
 
-.PHONY: all build run test clean watch docker-run docker-down itest templ-install
+.PHONY: all build run test clean watch docker-build docker-run docker-down itest templ-install
