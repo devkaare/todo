@@ -1,1 +1,4 @@
-package views // WARN: This is just here so the compiler can stfu
+// WARN: This file is just here so the compiler can stfu
+package views
+
+import _ "github.com/a-h/templ"
