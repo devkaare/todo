@@ -47,7 +47,7 @@ templ TodoByIDForm(t *model.Todo) {
 }
 
 templ TodoByIDPost(t *model.Todo) {
-	<form hx-target="this" hx-swap="outerHTML" autocomplete="off">
+	<form id="clearMe" hx-target="this" hx-swap="outerHTML" autocomplete="off">
 		<input type="text" name="title" value={ t.Title } required/>
 		<textarea name="description" required>{ t.Description }</textarea>
 		<button type="submit" hx-put={ fmt.Sprintf("/todos/%d", t.ID) }>Submit</button>
