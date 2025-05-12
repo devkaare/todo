@@ -1,6 +1,6 @@
-# Todo web app
+# To Do web app
 
-This is just a small todo web app, which I MIGHT use some day haha!
+This is just a small To Do web app, which I MIGHT use some day haha!
 
 ## Getting Started
 
