@@ -44,12 +44,13 @@ func (s *Server) RegisterTodoRoutes(r chi.Router) {
 	r.Get("/login", todoHandler.GetLoginPage)
 	r.Post("/login", todoHandler.LoginHandler)
 
-	r.Get("/", todoHandler.List)
-	r.Get("/{ID}", todoHandler.GetByID)
-	r.Get("/edit/{ID}", todoHandler.EditByID)
-
 	r.Group(func(r chi.Router) {
 		r.Use(AuthMiddleware)
+
+		r.Get("/", todoHandler.List)
+		r.Get("/{ID}", todoHandler.GetByID)
+		r.Get("/edit/{ID}", todoHandler.EditByID)
+
 		r.Post("/", todoHandler.Create)
 		r.Put("/{ID}", todoHandler.UpdateByID)
 		r.Delete("/{ID}", todoHandler.DeleteByID)
