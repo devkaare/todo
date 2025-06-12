@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand/v2"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/devkaare/todo/model"
@@ -14,13 +15,14 @@ import (
 	"github.com/devkaare/todo/views"
 
 	"github.com/go-chi/chi/v5"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type Todo struct {
 	Repo *todo.PostgresRepo
 }
 
-const password = "devkaare1"
+var password = os.Getenv("PASSWORD")
 
 func (t *Todo) Health(w http.ResponseWriter, r *http.Request) {
 	jsonResp, _ := json.Marshal(t.Repo.Health())
@@ -145,7 +147,7 @@ func (t *Todo) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("password") == password {
 			http.SetCookie(w, &http.Cookie{
 				Name:  "todo_auth",
-				Value: "authenticated",
+				Value: password,
 				Path:  "/",
 			})
 			http.Redirect(w, r, "/todos", http.StatusSeeOther)

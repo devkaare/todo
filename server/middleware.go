@@ -2,16 +2,17 @@ package server
 
 import (
 	"net/http"
+	"os"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
-const (
-	authCookieName = "todo_auth"
-)
+var password = os.Getenv("PASSWORD")
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie(authCookieName)
-		if err == nil && cookie.Value == "authenticated" {
+		cookie, err := r.Cookie("todo_auth")
+		if err == nil && cookie.Value == password {
 			next.ServeHTTP(w, r)
 			return
 		}
