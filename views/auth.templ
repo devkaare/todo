@@ -1,0 +1,11 @@
+package views
+
+templ LoginForm() {
+	@Base() {
+		<h2>Enter password to continue</h2>
+		<form method="POST" autocomplete="off">
+			<input type="password" name="password" autofocus required/>
+			<button type="submit">Login</button>
+		</form>
+	}
+}

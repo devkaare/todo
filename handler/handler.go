@@ -20,6 +20,8 @@ type Todo struct {
 	Repo *todo.PostgresRepo
 }
 
+const password = "password"
+
 func (t *Todo) Health(w http.ResponseWriter, r *http.Request) {
 	jsonResp, _ := json.Marshal(t.Repo.Health())
 	_, _ = w.Write(jsonResp)
@@ -131,4 +133,27 @@ func (t *Todo) EditByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	views.TodoByIDPost(todo).Render(context.Background(), w)
+}
+
+func (t *Todo) GetLoginPage(w http.ResponseWriter, r *http.Request) {
+	views.LoginForm().Render(context.Background(), w)
+}
+
+func (t *Todo) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		_ = r.ParseForm()
+		if r.FormValue("password") == password {
+			http.SetCookie(w, &http.Cookie{
+				Name:  "todo_auth",
+				Value: "authenticated",
+				Path:  "/",
+			})
+			http.Redirect(w, r, "/todos", http.StatusSeeOther)
+			return
+		}
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	views.LoginForm().Render(context.Background(), w)
 }

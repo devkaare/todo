@@ -1,15 +1,20 @@
+# WARN: This is kinda broken
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+      target: prod # You can change this to `prod`
     restart: unless-stopped
     ports:
       - ${PORT}:${PORT}
+    volumes:
+      - ./:/app
     environment:
       APP_ENV: ${APP_ENV}
       PORT: ${PORT}
-      DB_HOST: psql
+      DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
@@ -19,18 +24,18 @@ services:
       psql:
         condition: service_healthy
     networks:
-      - todo
+      - blueprint
   psql:
     image: postgres:latest
-    # restart: unless-stopped
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${DB_PORT}:5432"
-    # volumes: # Uncomment this (and the other part below) to enable persistance
-    #   - psql-volume:/var/lib/postgresql/data
+    volumes:
+      - psql_volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}'"]
       interval: 5s
@@ -38,10 +43,9 @@ services:
       retries: 3
       start_period: 15s
     networks:
-      - todo
+      - blueprint
 
-# volumes:
-#   psql-volume:
+volumes:
+  psql_volume:
 networks:
-  todo:
-
+  blueprint:

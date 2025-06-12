@@ -1,3 +1,5 @@
+# WARN: This is kinda broken
+
 MAIN_FILE = cmd/api/main.go
 
 # Build the application
@@ -20,30 +22,24 @@ templ-install:
 build: templ-install
 	@echo "Building..."
 	@templ generate
+	
 	@go build -o main $(MAIN_FILE)
 
 # Run the application
-run: build
-	@./main
-
+run:
+	@go run $(MAIN_FILE)
+	#
 # Create DB container
 docker-build:
-	@docker compose up --build --remove-orphans
+	@docker compose up --build
+
 # Run DB container
 docker-run:
 	@docker compose up
 
 # Shutdown DB container
 docker-down:
-	@docker compose down
-
-# Start DB service
-db-start:
-	@docker compose start psql
-
-# Stop DB service
-db-stop:
-	@docker compose stop psql
+	@docker-compose down
 
 # Test the application
 test:
@@ -75,5 +71,4 @@ watch:
             fi; \
         fi
 
-.PHONY: all build run test clean watch docker-build docker-run docker-down db-start db-stop itest templ-install 
-
+.PHONY: all build run test clean watch docker-build docker-run docker-down itest templ-install

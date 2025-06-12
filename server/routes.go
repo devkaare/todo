@@ -24,8 +24,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/todos", http.StatusSeeOther)
+		http.Redirect(w, r, "/todos/login", http.StatusSeeOther)
 	})
+
 	r.Route("/todos", s.RegisterTodoRoutes)
 
 	return r
@@ -39,10 +40,18 @@ func (s *Server) RegisterTodoRoutes(r chi.Router) {
 	}
 
 	r.Get("/health", todoHandler.Health)
-	r.Post("/", todoHandler.Create)
+
+	r.Get("/login", todoHandler.GetLoginPage)
+	r.Post("/login", todoHandler.LoginHandler)
+
 	r.Get("/", todoHandler.List)
 	r.Get("/{ID}", todoHandler.GetByID)
 	r.Get("/edit/{ID}", todoHandler.EditByID)
-	r.Put("/{ID}", todoHandler.UpdateByID)
-	r.Delete("/{ID}", todoHandler.DeleteByID)
+
+	r.Group(func(r chi.Router) {
+		r.Use(AuthMiddleware)
+		r.Post("/", todoHandler.Create)
+		r.Put("/{ID}", todoHandler.UpdateByID)
+		r.Delete("/{ID}", todoHandler.DeleteByID)
+	})
 }
