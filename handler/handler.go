@@ -20,7 +20,7 @@ type Todo struct {
 	Repo *todo.PostgresRepo
 }
 
-const password = "password"
+const password = "devkaare1"
 
 func (t *Todo) Health(w http.ResponseWriter, r *http.Request) {
 	jsonResp, _ := json.Marshal(t.Repo.Health())
