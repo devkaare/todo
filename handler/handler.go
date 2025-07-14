@@ -146,9 +146,13 @@ func (t *Todo) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		_ = r.ParseForm()
 		if r.FormValue("password") == password {
 			http.SetCookie(w, &http.Cookie{
-				Name:  "todo_auth",
-				Value: password,
-				Path:  "/",
+				Name:     "todo_auth",
+				Value:    password,
+				Path:     "/",
+				MaxAge:   31536000,
+				HttpOnly: true,
+				Secure:   true,
+				SameSite: http.SameSiteLaxMode,
 			})
 			http.Redirect(w, r, "/todos", http.StatusSeeOther)
 			return
